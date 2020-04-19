@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+<link href="~/Content/css/Login.css" rel="stylesheet" />
+<form action="/home/login" method="post">
+    <div class="imgcontainer">
+        <img src="~/images/lock (3).png" />
+    </div>
+    <div class="container">
+        <div id="logincss">
+            <label for="uname"> <b> Username:</b> </label>
+            <input type="text" placeholder="User name" name="txtUser" />
+            <br /> <br />
+            <label for="psw"> <b> Password:</b> </label>
+            <input type="password" placeholder="User name" name="txtpass" />
+            <br />
+        </div>
+        <br />
+        <button type="submit" title="Đăng nhập vào hệ thống"> Đăng nhập</button>
+        <button type="button" onclick="window.location.href = 'http://just1bite.xyz/'" title="Về trang chủ"> Huỷ bỏ</button>
+    </div>
+</form>
+

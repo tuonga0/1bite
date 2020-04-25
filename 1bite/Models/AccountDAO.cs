@@ -11,6 +11,20 @@ namespace _1bite
 {
     public class AccountDAO
     {
+        private string username;
+        private bool roles;
+        private string staffname;
+        private string staffPhone;
+        private string staffEmail;
+        private DateTime createdDate;
+
+        public string Username { get => username; set => username = value; }
+        public bool Roles { get => roles; set => roles = value; }
+        public string Staffname { get => staffname; set => staffname = value; }
+        public string StaffPhone { get => staffPhone; set => staffPhone = value; }
+        public string StaffEmail { get => staffEmail; set => staffEmail = value; }
+        public DateTime CreatedDate { get => createdDate; set => createdDate = value; }
+
         public static SqlConnection setConnection()
         {
             var conn = "server=118.27.193.68; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}"; //DESKTOP-C4SUR0U xem trong SQL
@@ -56,7 +70,7 @@ namespace _1bite
             sqlda.Fill(ds, "Account");
         }
 
-        public static bool checkName(string accName)
+        public static bool searchWithName(string accName) //sua lai
         {
             var url = "server=118.27.193.68; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);

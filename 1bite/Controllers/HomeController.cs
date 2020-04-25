@@ -79,10 +79,14 @@ namespace _1bite.Controllers
             }
             return View("Error");
         }
+        public ActionResult Order()
+        {
+            return View();
+        }
         public ActionResult Nhaphang()
         {
             ViewBag.Message = "Your manage page.";
-            if (Request.Cookies["userinfo"] != null)
+            if (Request.Cookies["dangnhap"] != null)
             {
                 return View();
             }
@@ -116,12 +120,7 @@ namespace _1bite.Controllers
             }
             return View("Error");
         }
-        public ActionResult Menu()
-        {
-            ViewBag.Message = "Your menu page.";
 
-            return View();
-        }
         public ActionResult Cart()
         {
             ViewBag.Message = "Your cart page.";

@@ -1,4 +1,13 @@
-﻿<link href="~/Content/css/Manage.css" rel="stylesheet" />
+﻿@{
+    ViewBag.Title = "Nhaphang";
+}
+@{
+    Layout = null;
+}
+@using _1bite.Models
+@model ViewModel
+<link href="~/Content/bootstrap/bootstrap-reboot.css" rel="stylesheet" />
+<link href="~/Content/css/Banhang.css" rel="stylesheet" />
 <html>
 <head>
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -6,9 +15,182 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <meta name="viewport" content="width=device-width" />
-    <title></title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>
+        window.jQuery || document.write('<script src="http://mysite.com/jquery.min.js"><\/script>')
+    </script>
+    <script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="/js/jquery-ui-personalized-1.5.2.packed.js"></script>
+    <script language="JavaScript" type="text/javascript" src="/js/sprinkle.js"></script>
+    <script type="text/javascript" class="init">
+        function addGoods() {
+            $.ajax({
+                url: '/home/addProduct',
+                data: {
+                    'id': $("#selectproduct option:selected").val(),
+                    'amount': $("#productamount").val(),
+                    'unitPrice': $("#unitprice").val(),
+                    'discount': $("#product-discount").val()
+                },
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    $('#ImportListProduct').empty().append(result)
+                }
+            });
+        }
+        function discount() {
+            var url = '@Url.Action("ImportDiscount", "Home")';
+            $.post(url, { 'discount': $('#discount').val(), 'shipFee': $('#shipFee').val()}, function (view) {
+                $("#bill").val(view);
+            });
+        }
+        function addImport() {
+            var url = '@Url.Action("addImport", "Home")';
+            $.post(url, { 'discount': $('#discount').val(), 'shipFee': $("#shipFee").val(), 'sourceId': $("#select-source option:selected").val() }, function (view) {
+                location.reload();
+            });
+        }
+        function delImport(id) {
+            var id = id;
+            $.ajax({
+                url: '/Home/DeleteImport',
+                type: "post",
+                data: { 'id': id },
+                cache: false,
+                success: function (result) {
+                    $('#Import').empty().append(result);
+                    location.reload();
+                }
+            });
+        }
+        function seeImport(id) {
+            var id = id;
+            $.ajax({
+                url: '/Home/seeImport',
+                type: "post",
+                data: { 'id': id },
+                cache: false,
+                success: function (result) {
+                    $('#ImportDetail').empty().append(result);
+                }
+            });
+        }
+    </script>
+    <title>Nhập hàng</title>
 </head>
 <body>
+    <a href="/Home/Manage">Quay lại</a>
     <h1>Nhập hàng</h1>
+    <div class="inputOrder">
+        <h4 class="sellerName">Người nhập: @ViewBag.messagestaffname</h4>
+        <h4 class="current-time">
+            Ngày:   <span id=tick2></span>
+        </h4>
+        Tên hàng:
+        <select id="selectproduct" name="selectproduct">
+            @foreach (Product product in Model.Product)
+            {
+                <option value="@product.id">@product.name (@product.unit)</option>
+            }
+        </select>
+        Số lượng:
+        <input name="productamount" id="productamount" min="1" step="any" type="number" value="1">
+        Giá mỗi đơn vị
+        <input name="unitprice" id="unitprice" min="1" step="any" type="number" value="1">
+        Giảm giá riêng:
+        <input name="product-discount" id="product-discount" step="any" type="number" value="0">
+        <button id="addRow" onclick="addGoods(), discount()">Thêm nguyên liệu</button>
+        <table class="display" style="width:100%">
+            <caption>Danh sách vật liệu của đơn hàng</caption>
+            <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th scope="col">
+                        Tên vật liệu
+                    </th>
+                    <th scope="col">
+                        Số lượng
+                    </th>
+                    <th scope="col">
+                        Giá tiền
+                    </th>
+                    <th scope="col">
+                        Tổng tiền
+                    </th>
+                    <th>Điều khiển</th>
+                </tr>
+            </thead>
+            <tbody id="ImportListProduct">
+            </tbody>
+        </table>
+    </div>
+    <div class="orderOverallInformation">
+        Giảm giá:
+        <input name="discount" id="discount" min="0" step="any" type="number" value="0" onkeypress="discount(this.val)">
+        Tiền Ship:
+        <input name="shipFee" id="shipFee" min="0" step="any" type="number" value="0" onkeypress="discount(this.val)">
+        Nguồn hàng:
+        <select id="select-source" name="select-source">
+            @foreach (Source product in Model.Source)
+            {
+                <option value="@product.id">@product.source</option>
+            }
+        </select>
+        Tổng tiền của đơn hàng:
+        <button type="button" onclick="discount()">Làm mới</button>
+        <input name="bill" id="bill" min="0" step="any" type="number" value="0" readonly="readonly">VND
+    </div>
+    <button type="button" onclick="window.location.href = '/Home/Nhaphang'" title="Huỷ dữ liệu"> Huỷ bỏ</button>
+    <input type="button" value="Xác nhận" onclick="addImport()" /><br />
+    <div class="importHistory" 4>
+        <table cellpadding="1" cellspacing="1" name="Order" id="Order" style="width:100%">
+            <h4>Hàng nhập hôm nay:</h4>
+            <a href="/Home/ViewAllImport">Xem tất cả đơn hàng</a>
+            <tr>
+                <th>Mã đơn</th>
+                <td>Thời gian</td>
+                <td>Giảm giá</td>
+                <th>Phí ship</th>
+                <th>Nguồn hàng</th>
+                <td>Tổng tiền</td>
+                <td>Điều khiển</td>
+            </tr>
+            @foreach (Import order in Model.Import)
+            {
+                <tr>
+                    <td>@order.id</td>
+                    <td>@order.date</td>
+                    <td>@order.overallDiscount</td>
+                    <td>@order.shipFee</td>
+                    <td>@order.source</td>
+                    <td>@order.total</td>
+                    <td>
+                        <button onclick="seeImport('@order.id')" data-id="@order.id">Xem Đơn</button>
+                        <button onclick="delImport('@order.id')" data-id="@order.id">Xoá Đơn</button>
+                    </td>
+                </tr>
+            }
+        </table>
+        <table class="display" style="width:100%">
+            <caption>Danh sách món của đơn hàng</caption>
+            <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Mã hàng</th>
+                    <th>Tên hàng</th>
+                    <th>Đơn vị</th>
+                    <th>Giá tiền mỗi đơn vị</th>
+                    <th>Số lượng</th>
+                    <th>Giảm giá</th>
+                    <th>Tổng tiền</th>
+                </tr>
+            </thead>
+            <tbody id="ImportDetail">
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

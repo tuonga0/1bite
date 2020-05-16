@@ -117,6 +117,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountDAO.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -125,8 +126,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\DishDAO.cs" />
-    <Compile Include="Models\ProductDAO.cs" />
+    <Compile Include="Models\Dish.cs" />
+    <Compile Include="Models\DishType.cs" />
+    <Compile Include="Models\Import.cs" />
+    <Compile Include="Models\ImportDetail.cs" />
+    <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderDetails.cs" />
+    <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\Shipper.cs" />
+    <Compile Include="Models\Source.cs" />
+    <Compile Include="Models\Staff.cs" />
+    <Compile Include="Models\ViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +153,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap\bootstrap-grid.css" />
     <Content Include="Content\bootstrap\bootstrap-reboot.css" />
+    <Content Include="Content\css\Banhang.css" />
     <Content Include="Content\css\bootstrap-reboot.css" />
     <Content Include="Content\css\Manage.css" />
     <Content Include="Content\css\mixins\_text-hide.css" />
@@ -221,9 +232,12 @@
     <Content Include="images\image_4.jpg" />
     <Content Include="images\image_5.jpg" />
     <Content Include="images\image_6.jpg" />
+    <Content Include="images\key.png" />
     <Content Include="images\laplanh.png" />
     <Content Include="images\loc.png" />
     <Content Include="images\lock %283%29.png" />
+    <Content Include="images\loginbg.jpg" />
+    <Content Include="images\Logo.jpg" />
     <Content Include="images\menu-1.jpg" />
     <Content Include="images\menu-2.jpg" />
     <Content Include="images\menu-3.jpg" />
@@ -240,6 +254,7 @@
     <Content Include="images\person_4.jpg" />
     <Content Include="images\icvegetable.png" />
     <Content Include="images\ship.png" />
+    <Content Include="images\user.png" />
     <Content Include="js\aos.js" />
     <Content Include="js\bootstrap-datepicker.js" />
     <Content Include="js\bootstrap.min.js" />
@@ -314,10 +329,22 @@
     <Content Include="Views\Home\Banhang.cshtml" />
     <Content Include="Views\Home\Stats.cshtml" />
     <Content Include="Views\Home\Nhaphang.cshtml" />
-    <Content Include="Views\Home\Quanli.cshtml" />
     <Content Include="Views\Home\LoggedIn.cshtml" />
     <Content Include="Views\Home\Order.cshtml" />
     <Content Include="site.webmanifest" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\addDish.cshtml" />
+    <Content Include="Views\Home\delDish.cshtml" />
+    <Content Include="Views\Home\seeOrder.cshtml" />
+    <Content Include="Views\Home\ViewAllOrders.cshtml" />
+    <Content Include="Views\Home\QuanliAccount.cshtml" />
+    <Content Include="Views\Home\QuanliDish.cshtml" />
+    <Content Include="Views\Home\seeAccountInfo.cshtml" />
+    <Content Include="Views\Home\addProduct.cshtml" />
+    <Content Include="Views\Home\delProduct.cshtml" />
+    <Content Include="Views\Home\seeImport.cshtml" />
+    <Content Include="Views\Home\ViewAllImport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

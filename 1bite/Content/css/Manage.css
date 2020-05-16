@@ -1,10 +1,11 @@
 ﻿body {
 }
 
+
 div {
     margin: auto;
     width: 300px;
-    margin-top: 10%;
+    margin-top: 100px;
 }
 
 ul {
@@ -31,3 +32,20 @@ li {
         li a:hover {
             background-color: #111111;
         }
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: sticky;
+    background-color: #333333;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    margin-top: 0;
+}

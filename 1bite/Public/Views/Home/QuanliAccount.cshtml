@@ -1,0 +1,113 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+@using _1bite.Models
+@model ViewModel
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+
+    <title>Quản lí tài khoản</title>
+</head>
+<body>
+    <a href="/Home/Manage">Quay lại</a>
+    Logo, Quản lí tài khoản, button Trang chủ
+    <div>
+        Thêm tài khoản mới
+        <input name="username" id="username" type="text" placeholder="Tên tài khoản">
+        <input name="password" id="password" type="password" placeholder="Mật khẩu">
+        <input name="name" id="name" type="text" placeholder="Tên nhân viên">
+        <input name="phone" id="phone" type="text" placeholder="Số điện thoại"maxlength="10">
+        <input name="email" id="email" type="text" placeholder="Email">
+        <input type="button" value="Xác nhận" onclick="addAccount()" />
+        <div>
+            <table id="table_id" class="display" width="100%">
+                <thead>
+                    <tr>
+                        <th>Tài khoản</th>
+                        <th>Mật khẩu</th>
+                        <th>Ngày tạo</th>
+                        <th>Chức vụ</th></td>
+                        <td>Điều khiển</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Account != null)
+                    {
+                        foreach (Account order in Model.Account)
+                        {
+                            <tr>
+                                <td>@order.username</td>
+                                <td>@order.password</td>
+                                <td>@order.date</td>
+                                <td>@order.role</td>
+                                <td>
+                                    <button onclick="seeAccount(@order.id)" data-id="@order.id">Xem thông tin</button>
+                                    <button onclick="delAccount(@order.id)" data-id="@order.id">Xoá tài khoản</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <table class="display" style="width:100%">
+            <caption>Thông tin nhân viên</caption>
+            <thead>
+                <tr>
+                    <th>Mã nhân viên</th>
+                    <th>Tên nhân viên</th>
+                    <th>Số điện thoại</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody id="Staff">
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+<script>
+    function addAccount() {
+        var url = '@Url.Action("addAccount", "Home")';
+        $.post(url, { 'username': $('#username').val(), 'password': $('#password').val(), 'name': $("#name").val(), 'phone': $("#phone").val(), 'email': $('#email').val() }, function (view) {
+            alert("Thêm thành công")
+            location.reload();
+        });
+    }
+    function delAccount(id) {
+        var id = id;
+        $.ajax({
+            url: '/Home/DeleteAccount',
+            type: "post",
+            data: { 'id': id },
+            cache: false,
+            success: function (result) {
+                alert(result)
+                location.reload();
+            }
+        });
+    }
+    function seeAccount(id) {
+        var id = id;
+        $.ajax({
+            url: '/Home/seeAccountInfo',
+            type: "post",
+            data: { 'id': id },
+            cache: false,
+            success: function (result) {
+                alert(result)
+                $('#Staff').empty().append(result);
+            }
+        });
+    }
+    $(document).ready(function () {
+        $('#table_id').DataTable();
+    });
+</script>

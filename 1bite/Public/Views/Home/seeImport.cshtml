@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "seeImport";
+}
+@using _1bite.Models
+@model ViewModel
+@if (Model.importDetail != null)
+{
+    foreach (ImportDetail id in Model.importDetail)
+    {
+        <tr>
+            <td>@id.importId</td>
+            <td>@id.productId</td>
+            <td>@id.productName</td>
+            <td>@id.Unit</td>
+            <td>@id.unitPrice</td>
+            <td>@id.amount</td>
+            <td>@id.discounted</td>
+            <td>@id.paid</td>
+        </tr>
+    }
+}

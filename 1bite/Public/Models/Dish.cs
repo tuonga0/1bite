@@ -5,7 +5,7 @@ using System.Web;
 
 namespace _1bite.Models
 {
-    public class ProductDAO
+    public class Dish
     {
     }
 }

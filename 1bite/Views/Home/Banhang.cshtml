@@ -1,7 +1,16 @@
 ﻿@{
-    ViewBag.Title = "Manage";
+    ViewBag.Title = "Banhang";
 }
-<link href="~/Content/css/Manage.css" rel="stylesheet" />
+@{
+    Layout = null;
+}
+@using _1bite.Models;
+@model ViewModel
+@{
+    Layout = null;
+}
+<link href="~/Content/bootstrap/bootstrap-reboot.css" rel="stylesheet" />
+<link href="~/Content/css/Banhang.css" rel="stylesheet" />
 <html>
 <head>
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -9,9 +18,222 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <meta name="viewport" content="width=device-width" />
-    <title></title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>
+        window.jQuery || document.write('<script src="http://mysite.com/jquery.min.js"><\/script>')
+    </script>
+    <script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="/js/jquery-ui-personalized-1.5.2.packed.js"></script>
+    <script language="JavaScript" type="text/javascript" src="/js/sprinkle.js"></script>
+    <script type="text/javascript" class="init">
+        function addDishjs() {
+            $.ajax({
+                url: '/home/addDish',
+                data: {
+                    'id': $("#selectdish option:selected").val(),
+                    'name': $("#selectdish option:selected").text(),
+                    'amount': $("#dishamount").val()
+                },
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    $('#OrderListDish').empty().append(result)
+                }
+            });
+        }
+        function discount() {
+            var url = '@Url.Action("ChangeTheValue", "Home")';
+            $.post(url, { 'model': $('form').serialize(), 'discount': $('#discount').val(), 'type': $("#select-discount option:selected").val(), 'address': $("customeraddress").val() }, function (view) {
+                $("#bill").val(view);
+            });
+        }
+        function addOrder() {
+            var url = '@Url.Action("addOrder", "Home")';
+            $.post(url, { 'discount': $('#discount').val(), 'type': $("#select-discount option:selected").val(), 'note': $("note").text(), 'shippedbyId': $("#selectship option:selected").val(), 'address': $("address").val() }, function (view) {
+                location.reload();
+            });
+        }
+        function delOrd(id) {
+            var id = id;
+            $.ajax({
+                url: '/Home/Delete',
+                type: "post",
+                data: { 'id': id },
+                cache: false,
+                success: function (result) {
+                    $('#Order').empty().append(result);
+                    location.reload();
+                }
+            });
+        }
+        function seeOrd(id) {
+            var id = id;
+            $.ajax({
+                url: '/Home/seeOrder',
+                type: "post",
+                data: { 'id': id },
+                cache: false,
+                success: function (result) {
+                    $('#OrderDetail').empty().append(result);
+                }
+            });
+        }
+    </script>
+    <title>Bán hàng</title>
 </head>
 <body>
+    <a href="/Home/Manage">Quay lại</a>
     <h1>Bán hàng</h1>
+    <div class="inputOrder">
+        <h4 class="sellerName">Người bán: @ViewBag.messagestaffname</h4>
+        <h4 class="current-time">
+            Ngày:   <span id=tick2></span>
+        </h4>
+        @*Thêm Món*@
+        <select id="selectdish" name="selectdish">
+            @foreach (Dish dish in Model.Dish)
+            {
+                <option value="@dish.id">@dish.name</option>
+            }
+        </select>
+        <input name="dishamount" id="dishamount" min="1" step="any" type="number" value="1">
+        <button id="addRow" onclick="addDishjs(); discount()">Thêm món</button>
+        <table class="display" style="width:100%">
+            <caption>Danh sách món của đơn hàng</caption>
+            <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th scope="col">
+                        Tên món
+                    </th>
+                    <th scope="col">
+                        Số lượng
+                    </th>
+                    <th scope="col">
+                        Giá tiền
+                    </th>
+                    <th scope="col">
+                        Tổng tiền
+                    </th>
+                    <th>Điều khiển</th>
+                </tr>
+            </thead>
+            <tbody id="OrderListDish">
+            </tbody>
+        </table>
+    </div>
+    <div class="orderOverallInformation">
+        Giảm giá:
+        <input name="discount" id="discount" min="1" step="any" type="number" value="0" onkeypress="discount(this.val)">
+        <select id="select-discount" name="select-discount" onchange="discount()">
+            <option value="VND">VND</option>
+            <option value="%">%</option>
+        </select>
+        Bên ship:
+        <select id="selectship" name="selectship">
+            @foreach (Shipper shipper in Model.Shipper)
+            {
+                <option value="@shipper.id">@shipper.name</option>
+            }
+        </select>
+        <input name="customeraddress" id="customeraddress" step="any" type="text" placeholder="Địa chỉ khách hàng">
+        <input name="note" id="note" step="any" type="text" placeholder="Ghi chú">
+        Tổng tiền của đơn hàng:
+        <button type="button" onclick="discount()">Làm mới</button>
+        <input name="bill" id="bill" min="0" step="any" type="number" value="0" readonly="readonly">VND
+    </div>
+    <button type="button" onclick="window.location.href = '/Home/Banhang'" title="Về trang chủ"> Huỷ bỏ</button>
+    <input type="button" value="Xác nhận" onclick="addOrder()" /><br />
+    <div class="orderHistory" 4>
+        <table cellpadding="1" cellspacing="1" name="Order" id="Order" style="width:100%">
+            <h4>Đơn hôm nay:</h4>
+            <a href="/Home/ViewAllOrders">Xem tất cả đơn hàng</a>
+            <tr>
+                <th>Mã đơn</th>
+                <th>Tình trạng</th>
+                <td>Nhân viên</td>
+                <td>Thời gian</td>
+                <td>Giảm giá</td>
+                <td>Ghi chú</td>
+                <td>Tiền đơn hàng</td>
+                <td>Điều khiển</td>
+            </tr>
+            @foreach (Order order in Model.Order)
+            {
+                <tr>
+                    <td>@order.id</td>
+                    <td>@order.status</td>
+                    <td>@order.staffName</td>
+                    <td>@order.Date</td>
+                    <td>@order.discount</td>
+                    <td>@order.note</td>
+                    <td>@order.Total</td>
+                    <td>
+                        <button onclick="seeOrd('@order.id')" data-id="@order.id">Xem Đơn</button>
+                        <button onclick="delOrd('@order.id')" data-id="@order.id">Xoá Đơn</button>
+                    </td>
+                </tr>
+            }
+        </table>
+        <table class="display" style="width:100%">
+            <caption>Danh sách món của đơn hàng</caption>
+            <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Tên món</th>
+                    <th>Giá món</th>
+                    <th>Số lượng</th>
+                    <th>Tổng tiền</th>
+                </tr>
+            </thead>
+            <tbody id="OrderDetail">
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
+@*<script>
+        var Today = new Date();
+        var date = document.querySelector(".date");
+
+        var time = document.querySelector(".time");
+
+        time.innerHTML = Today.getTime();
+        date.innerHTML = Today;
+    </script>*@
+<script>
+<!--
+
+    /*By JavaScript Kit
+    http://javascriptkit.com
+    Credit MUST stay intact for use
+    */
+
+    //function show2() {
+    //    if (!document.all && !document.getElementById)
+    //        return
+    //    thelement = document.getElementById ? document.getElementById("tick2") : document.all.tick2
+    //    var Digital = new Date()
+    //    var hours = Digital.getHours()
+    //    var minutes = Digital.getMinutes()
+    //    var seconds = Digital.getSeconds()
+    //    var dn = "PM"
+    //    if (hours < 12)
+    //        dn = "AM"
+    //    if (hours > 12)
+    //        hours = hours - 12
+    //    if (hours == 0)
+    //        hours = 12
+    //    if (minutes <= 9)
+    //        minutes = "0" + minutes
+    //    if (seconds <= 9)
+    //        seconds = "0" + seconds
+    //    var ctime = hours + ":" + minutes + ":" + seconds + " " + dn
+    //    thelement.innerHTML = "<b style='font-size:14;color:black;'>" + ctime + "</b>"
+    //    setTimeout("show2()", 1000)
+    //}
+    //window.onload = show2
+//-->
+</script>

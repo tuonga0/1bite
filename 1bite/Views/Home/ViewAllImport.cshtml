@@ -1,0 +1,102 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+@using _1bite.Models
+@model ViewModel
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <title>Xem tất cả</title>
+</head>
+<body>
+    <div>
+        <table id="table_id" class="display">
+            <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <td>Thời gian</td>
+                    <td>Giảm giá</td>
+                    <th>Phí ship</th>
+                    <th>Nguồn hàng</th>
+                    <td>Tổng tiền</td>
+                    <td>Điều khiển</td>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Import != null)
+                {
+                    foreach (Import order in Model.Import)
+                    {
+                        <tr>
+                            <td>@order.id</td>
+                            <td>@order.date</td>
+                            <td>@order.overallDiscount</td>
+                            <td>@order.shipFee</td>
+                            <td>@order.source</td>
+                            <td>@order.total</td>
+                            <td>
+                                <button onclick="seeImport('@order.id')" data-id="@order.id">Xem Đơn</button>
+                                <button onclick="delImport('@order.id')" data-id="@order.id">Xoá Đơn</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <table class="display" style="width:100%">
+            <caption>Danh sách món của đơn hàng</caption>
+            <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Mã hàng</th>
+                    <th>Tên hàng</th>
+                    <th>Đơn vị</th>
+                    <th>Giá tiền mỗi đơn vị</th>
+                    <th>Số lượng</th>
+                    <th>Giảm giá</th>
+                    <th>Tổng tiền</th>
+                </tr>
+            </thead>
+            <tbody id="ImportDetail">
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        $('#table_id').DataTable();
+    });
+    function delImport(id) {
+        var id = id;
+        $.ajax({
+            url: '/Home/DeleteImport',
+            type: "post",
+            data: { 'id': id },
+            cache: false,
+            success: function (result) {
+                $('#Import').empty().append(result);
+                location.reload();
+            }
+        });
+    }
+    function seeImport(id) {
+        var id = id;
+        $.ajax({
+            url: '/Home/seeImport',
+            type: "post",
+            data: { 'id': id },
+            cache: false,
+            success: function (result) {
+                $('#ImportDetail').empty().append(result);
+            }
+        });
+    }
+</script>

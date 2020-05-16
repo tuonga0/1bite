@@ -1,7 +1,7 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿<!DOCTYPE html>
+@{
+    Layout = null;
 }
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>1Bite-1 Bite melts you</title>
@@ -55,7 +55,7 @@
                     <li class="nav-item"><a href="#Contacts" class="nav-link">Liên hệ</a></li>
                     <li class="nav-item"><a href="Home/Manage" class="nav-link">Quản lí</a></li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link" id="User">Xin chào @Request.Cookies["dangnhap"].Value.ToString().Substring(9, Request.Cookies["dangnhap"].Value.ToString().Length - 9)</a>
+                        <a href="#" class="nav-link" id="User">Xin chào @ViewBag.messagestaffname</a>
                         <div class="dropdown-content">
                             <a href="/Home/Logout">Logout</a>
                         </div>
@@ -450,22 +450,12 @@
             <div class="row mb-5">
                 <div class="col-lg-3 col-md-6 mb-5 mb-md-5" style="margin:auto">
                     <div class="ftco-footer-widget mb-4">
-                        <h2 class="ftco-heading-2">About Us</h2>
-                        <div class="block-23 mb-3">
-                            <ul style="white-space:nowrap">
-                                <li>Nhận order từ 9:00am - 2:00am</li>
-                                <li>Ship theo khung giờ đồng giá 15k</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-5 mb-md-5" style="margin:auto">
-                    <div class="ftco-footer-widget mb-4">
                         <h2 class="ftco-heading-2">Have a Questions?</h2>
                         <div class="block-23 mb-3">
                             <ul style="white-space:nowrap">
                                 <li><span class="icon icon-phone"></span>0834848030 - 0946949262</li>
                                 <li><span class="icon icon-envelope"></span>1bite.sg@gmail.com</li>
+                                <li>Nhận order từ 9:00am - 2:00am</li>
                             </ul>
                         </div>
                     </div>

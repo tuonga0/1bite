@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "seeAccountInfo";
+}
+@using _1bite.Models
+@model ViewModel
+@if (Model.Staff != null)
+{
+    foreach (Staff od in Model.Staff)
+    {
+        <tr>
+            <td>@od.id</td>
+            <td>@od.name</td>
+            <td>@od.phone</td>
+            <td>@od.email</td>
+        </tr>
+    }
+}

@@ -1,29 +1,33 @@
 ﻿@{
     ViewBag.Title = "Login";
 }
+@{
+    Layout = null;
+}
+<link href="~/Content/css/Login.css" rel="stylesheet" />
 <head>
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
+    <link rel="manifest" href="/site.webmanifest">\
+    <title>Login to 1Bite</title>
 </head>
-<link href="~/Content/css/Login.css" rel="stylesheet" />
-<form action="/home/login" method="post">
-    <div class="imgcontainer">
-        <img src="~/images/lock (3).png" />
-    </div>
-    <div class="container">
-        <div id="logincss">
-            <label for="uname"> <b> Username:</b> </label>
-            <input type="text" placeholder="User name" name="txtUser" />
-            <br /> <br />
-            <label for="psw"> <b> Password:</b> </label>
-            <input type="password" placeholder="User name" name="txtpass" />
-            <br />
+<body>
+    <form action="/home/login" method="post">
+        <div class="imgcontainer">
+            <h2>Login</h2>
+            <img src="~/images/lock (3).png" />
         </div>
-        <br />
-        <button type="submit" title="Đăng nhập vào hệ thống"> Đăng nhập</button>
-        <button type="button" onclick="window.location.href = 'http://just1bite.xyz/'" title="Về trang chủ"> Huỷ bỏ</button>
-    </div>
-</form>
-
+        <div class="container">
+            <div>
+                <input type="text" placeholder="Username" name="txtUser" id="Username" />
+                <br /> <br />
+                <input type="password" placeholder="Password" name="txtpass" id="Password" />
+                <br />
+            </div>
+            <br />
+            <button type="submit" title="Đăng nhập vào hệ thống"> Đăng nhập</button>
+            <button type="button" onclick="window.location.href = '/'" title="Về trang chủ"> Huỷ bỏ</button>
+        </div>
+    </form>
+</body>

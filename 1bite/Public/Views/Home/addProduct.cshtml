@@ -1,0 +1,59 @@
+﻿@{
+    Layout = null;
+}
+@using _1bite.Models
+@model ViewModel
+@if (Model.importDetail != null)
+{
+    foreach (var item in Model.importDetail)
+    {
+        <tr>
+            <td scope="row">
+                @item.productId
+            </td>
+            <td scope="row">
+                @item.productName
+            </td>
+            <td scope="row">
+                @item.amount
+            </td>
+            <td scope="row">
+                @item.unitPrice
+            </td>
+            <td scope="row">
+                @item.paid
+            </td>
+            <td>
+                <button onclick="deleteProduct(@item.productId)" data-id="@item.productId">Xoá món</button>
+            </td>
+        </tr>
+    }
+}
+<script type="text/javascript" class="init">
+    function deleteProduct(id) {
+        var id = id;
+        $.ajax({
+            url: '/Home/delProduct',
+            type: "post",
+            data: { 'id': id },
+            cache: false,
+            success: function (result) {
+                alert(result);
+                $('#ImportListProduct').empty().append(result);
+            },
+            error: function (result) {
+                alert(result.responseText);
+            }
+        });
+        var url = '@Url.Action("ImportDiscount", "Home")';
+        $.post(url, { 'discount': $('#discount').val() }, function (view) {
+            $("#bill").val(view);
+        });
+    }
+    function discount() {
+        var url = '@Url.Action("ImportDiscount", "Home")';
+        $.post(url, { 'discount': $('#discount').val(), 'shipFee': $('#shipFee').val() }, function (view) {
+            $("#bill").val(view);
+        });
+    }
+</script>

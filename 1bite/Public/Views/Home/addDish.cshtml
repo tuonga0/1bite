@@ -1,0 +1,55 @@
+﻿@{
+    Layout = null;
+}
+@using _1bite.Models
+@model ViewModel
+@if (Model.OrderDetails != null)
+{
+    foreach (var item in Model.OrderDetails)
+    {
+        <tr>
+            <td scope="row">
+                @item.id
+            </td>
+            <td scope="row">
+                @item.name
+            </td>
+            <td scope="row">
+                @item.amount
+            </td>
+            <td scope="row">
+                @item.price
+            </td>
+            <td scope="row">
+                @item.total
+            </td>
+            <td>
+                <button  onclick="delDish2('@item.id'); discount()" data-id="@item.id">Xoá món</button>
+            </td>
+        </tr>
+    }
+}
+<script type="text/javascript" class="init">
+    function delDish2(id) {
+        var id = id;
+        $.ajax({
+            url: '/Home/delDish',
+            type: "post",
+            data: { 'id': id },
+            cache: false,
+            success: function (result) {
+                $('#OrderListDish').empty().append(result);
+            }
+        });
+        var url = '@Url.Action("ChangeTheValue", "Home")';
+        $.post(url, {model: $('form').serialize(), 'discount': $('#discount').val(), 'type': $("#select-discount option:selected").val() }, function (view) {
+            $("#bill").val(view);
+        });
+    }
+    function discount() {
+        var url = '@Url.Action("ChangeTheValue", "Home")';
+        $.post(url, { 'model': $('form').serialize(), 'discount': $('#discount').val(), 'type': $("#select-discount option:selected").val(), 'address': $("customeraddress").val() }, function (view) {
+            $("#bill").val(view);
+        });
+    }
+</script>

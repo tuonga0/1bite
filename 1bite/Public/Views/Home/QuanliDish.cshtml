@@ -1,0 +1,90 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+@using _1bite.Models
+@model ViewModel
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+
+    <title>Quản lí món ăn</title>
+</head>
+<body>
+    <a href="/Home/Manage">Quay lại</a>
+    Logo, Quản lí Món ăn, button Trang chủ
+    <div>
+        Thêm món mới
+        <input name="Name" id="Name" type="text" placeholder="Tên món ăn">
+        <select id="select-dishtype" name="select-dishtype">
+            @foreach (DishType dish in Model.DishType)
+            {
+                <option value="@dish.id">@dish.type</option>
+            }
+        </select>
+        <input name="price" id="price" min="1" step="any" type="number" value="1">VND
+        <input name="des" id="des" type="text" placeholder="Mô tả">
+        <input type="button" value="Xác nhận" onclick="addDish()" />
+        <table id="table_id" class="display" width="100%">
+            <thead>
+                <tr>
+                    <th>Mã món</th>
+                    <th>Tên món</th>
+                    <td>Giá món(VND)</td>
+                    <td>Miêu tả</td>
+                    <td>Loại món</td>
+                    <td>Điều khiển</td>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Dish != null)
+                {
+                    foreach (Dish order in Model.Dish)
+                    {
+                        <tr>
+                            <td>@order.id</td>
+                            <td>@order.name</td>
+                            <td>@order.price</td>
+                            <td>@order.des</td>
+                            <td>@order.dishtype</td>
+                            <td>
+                                <button onclick="delDish(@order.id)" data-id="@order.id">Xoá Món</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+<script>
+    function addDish() {
+        var url = '@Url.Action("newDish", "Home")';
+        $.post(url, { 'name': $('#Name').val(), 'id': $("#select-dishtype option:selected").val(), 'price': $("#price").val(), 'des': $("#des").val() }, function (view) {
+            alert("Thêm thành công")
+            location.reload();
+        });
+    }
+    function delDish(id) {
+        var id = id;
+        $.ajax({
+            url: '/Home/DeleleDish',
+            type: "post",
+            data: { 'id': id },
+            cache: false,
+            success: function (result) {
+                alert("Xoá thành công")
+                location.reload();
+            }
+        });
+    }
+    $(document).ready(function () {
+        $('#table_id').DataTable();
+    });
+</script>

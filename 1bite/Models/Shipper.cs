@@ -5,7 +5,9 @@ using System.Web;
 
 namespace _1bite.Models
 {
-    public class DishDAO
+    public class Shipper
     {
+        public int id { get; set; }
+        public string name { get; set; }
     }
 }

@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "seeOrder";
+}
+@using _1bite.Models
+@model ViewModel
+@if (Model.OrderDetails != null)
+{
+    foreach (OrderDetails od in Model.OrderDetails)
+    {
+        <tr>
+            <td>@od.orderId</td>
+            <td>@od.name</td>
+            <td>@od.price</td>
+            <td>@od.amount</td>
+            <td>@od.total</td>
+        </tr>
+    }
+}
+

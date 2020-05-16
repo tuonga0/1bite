@@ -1,6 +1,9 @@
 ﻿@{
     ViewBag.Title = "Manage";
 }
+@{
+    Layout = null;
+}
 <link href="~/Content/css/Manage.css" rel="stylesheet" />
 <html>
 <head>
@@ -9,14 +12,21 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <meta name="viewport" content="width=device-width" />
-    <title></title>
+    <title>Điều khiển</title>
 </head>
 <body>
+    Logo, Điều khiển, button Trang chủ
     <div>
         <ul>
             <li><a href="/Home/Banhang">Bán hàng</a></li> @*nghĩa là trong HomeController chạy hàm Banhang*@
             <li><a href="/Home/Nhaphang">Nhập hàng</a></li>
-            <li><a href="/Home/Quanli">Quản lí</a></li>
+            <li class="dropdown">
+                <a href="">Quản lí</a>
+                <div class="dropdown-content">
+                    <a href="/Home/quanliDish" >Quản lí Món ăn</a>
+                    <a href="/Home/quanliAccount">Quản lí Tài khoản</a>
+                </div>
+            </li>
             <li><a href="/Home/Stats">Số liệu/thống kê</a></li>
             <li><a href="/">Trang chủ</a></li>
             <li><a href="/Home/Logout">Thoát</a></li>

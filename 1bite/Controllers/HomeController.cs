@@ -215,19 +215,7 @@ namespace _1bite.Controllers
         }
         public ActionResult Order()
         {
-            if (Request.Cookies["userinfo"] != null)
-            {
-                HttpCookie reqCookies = Request.Cookies["userinfo"];
-                if (AccountDAO.GetStaffId(reqCookies["userName"].ToString()) == null)
-                {
-                    var c = new HttpCookie("userinfo");
-                    c.Expires = DateTime.Now.AddDays(-1);
-                    Response.Cookies.Add(c);
-                    return View("Error");
-                }
-                return View();
-            }
-            return View("Error");
+            return View();
         }
         public ActionResult Nhaphang()
         {

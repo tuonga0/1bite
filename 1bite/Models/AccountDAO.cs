@@ -15,7 +15,7 @@ namespace _1bite
 
         public static SqlConnection setConnection()
         {
-            var conn = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}; MultipleActiveResultSets=True"; //DESKTOP-C4SUR0U xem trong SQL
+            var conn = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}; MultipleActiveResultSets=True"; //DESKTOP-C4SUR0U xem trong SQL
             return new SqlConnection(conn);
         }
         public static string EncodePassword(string originalPassword)
@@ -35,7 +35,7 @@ namespace _1bite
         }
         public static bool AccountVerify(string acc, string pwd)
         {
-            var url = "server=137.59.106.96 ;database=uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ;database=dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             string sql = "select * from Account where Username='" + acc + "'and password='" + pwd + "'";
@@ -85,7 +85,7 @@ namespace _1bite
         public static void addOrder(int staffId, int discount, string note, int statusId, int shippedbyId, string address, List<OrderDetails> lod)
         {
             int orderId;
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}; MultipleActiveResultSets=True";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}; MultipleActiveResultSets=True";
             var sql = "insert into [Order] OUTPUT inserted.orderID values (@staffId, GETDATE(), @discount, @note, @statusId, @shippedbyId, @customerAddress)";
             var insertOD = "insert into Order_Item values (@orderID, @dishID, @dishAmount)";
             var conn = new SqlConnection(url);
@@ -128,7 +128,7 @@ namespace _1bite
         public static void addImport(int ovadiscount, int shipFee, int sourceId, int staffId, List<ImportDetail> lid)
         {
             int importId;
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}; MultipleActiveResultSets=True";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}; MultipleActiveResultSets=True";
             var sql = "insert into Import OUTPUT inserted.importID values (GETDATE(), @discount, @shipFee, @sourceId, @staffId)";
             var insertID = "insert into Import_Product values (@importID, @productID, @unitPrice,@discount,@amount)";
             var conn = new SqlConnection(url);
@@ -156,7 +156,7 @@ namespace _1bite
         }
         public static bool checkAdm(string acc, string pwd)
         {
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             string sql = "select [role] from Account where [Username]='" + acc + "'and [password]='" + pwd + "'";
@@ -181,7 +181,7 @@ namespace _1bite
         public static string GetStaffName(string username)
         {
             string name;
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             string sql = "Select staffName from Staff where staffId = @staffid";
@@ -196,7 +196,7 @@ namespace _1bite
         public static string GetStaffNameWithID(int id)
         {
             string name;
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             string sql = "Select staffName from Staff where staffId = @staffid";
@@ -211,7 +211,7 @@ namespace _1bite
         public static string GetProductNameWithID(int id)
         {
             string name;
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             string sql = "Select productName from Product where productId = @id";
@@ -226,7 +226,7 @@ namespace _1bite
         public static string GetProductUnitWithID(int id)
         {
             string name;
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             string sql = "Select productUnit from Product where productId = @id";
@@ -241,7 +241,7 @@ namespace _1bite
         public static string GetShipNameWithID(int id)
         {
             string name;
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             string sql = "Select Shipper from Shipper where ShipperId = @Shipperid";
@@ -256,7 +256,7 @@ namespace _1bite
         public static string GetSourceNameWithID(int id)
         {
             string name;
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             string sql = "Select sourceName from Source where SourceId = @id";
@@ -271,7 +271,7 @@ namespace _1bite
         public static string GetStatusWithID(int id)
         {
             string status;
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             string sql = "Select statusName from Status where statusId = @id";
@@ -287,7 +287,7 @@ namespace _1bite
         public static string GetDishName(string dishId)
         {
             string name;
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             string sql = "Select dishName from Dish where dishId = @dishid";
@@ -303,7 +303,7 @@ namespace _1bite
         public static int GetDishPrice(int dishId)
         {
             int price;
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             string sql = "Select dishPrice from Dish where dishId = @dishid";
@@ -319,7 +319,7 @@ namespace _1bite
         public static string GetStaffId(string username)
         {
             string id;
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             string sql = "Select staffId from Staff where accId = (select accID from Account where username = @username)";
@@ -373,7 +373,7 @@ namespace _1bite
         {
             int price;
             string sql = "select dishprice from Dish where dishid = @id";
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             SqlCommand sqlcom = new SqlCommand(sql, conn);
@@ -626,7 +626,7 @@ namespace _1bite
         }
         public static List<OrderDetails> getOrderDetailsWithId(int id)
         {
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             String sql = "select * from Order_Item where orderID = '" + id + "'";
@@ -646,7 +646,7 @@ namespace _1bite
         }
         public static List<ImportDetail> getImportDetailsWithId(int id)
         {
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             String sql = "select * from Import_Product where ImportID = '" + id + "'";
@@ -668,7 +668,7 @@ namespace _1bite
         }
         public static List<OrderDetails> getOrderDetailsWithDishId(int id)
         {
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             String sql = "select * from Order_Item where DishID = '" + id + "'";
@@ -689,7 +689,7 @@ namespace _1bite
 
         public static void deleteOrders(int id)
         {
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             SqlCommand cmd = new SqlCommand("delete from Order_Item where orderID = @id Delete From [Order] Where orderID = @id", conn);
@@ -699,7 +699,7 @@ namespace _1bite
         }
         public static void deleteImport(int id)
         {
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             SqlCommand cmd = new SqlCommand("delete from Import_Product where importId = @id Delete From Import Where importId = @id", conn);
@@ -709,7 +709,7 @@ namespace _1bite
         }
         public static void deleteDish(int id)
         {
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             SqlCommand cmd = new SqlCommand("Delete from Dish where DishId = @id", conn);
@@ -720,7 +720,7 @@ namespace _1bite
 
         public static void deleteAccount(int id)
         {
-            var url = "server=137.59.106.96 ; database =uonga0_HzL12153_db;uid=uonga0_HzL12153_dbuser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=dBforStudyinguser;pwd=!Q@W#E$R%T^Y&U*I(O)P_{+}";
             var conn = new SqlConnection(url);
             conn.Open();
             SqlCommand cmd = new SqlCommand("Delete from Staff where accId = @id delete from Account where accID = @id", conn);

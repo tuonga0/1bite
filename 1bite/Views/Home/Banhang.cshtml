@@ -131,13 +131,6 @@
             <option value="VND">VND</option>
             <option value="%">%</option>
         </select>
-        Bên ship:
-        <select id="selectship" name="selectship">
-            @foreach (Shipper shipper in Model.Shipper)
-            {
-                <option value="@shipper.id">@shipper.name</option>
-            }
-        </select>
         <input name="customeraddress" id="customeraddress" step="any" type="text" placeholder="Địa chỉ khách hàng">
         <input name="note" id="note" step="any" type="text" placeholder="Ghi chú">
         Tổng tiền của đơn hàng:

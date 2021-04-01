@@ -125,7 +125,6 @@ namespace _1bite.Controllers
                     return View("Error");
                 }
                 mymodel.Dish = AccountDAO.getDish();
-                mymodel.Shipper = AccountDAO.getShipper();
                 List<Order> lo = new List<Order>();
                 List<OrderDetails> lod = new List<OrderDetails>();
                 lo = AccountDAO.getOrdersToday();

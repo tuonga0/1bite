@@ -15,9 +15,6 @@ namespace _1bite.Models
         public DateTime Date { get; set; }
         public int discount { get; set; }
         public string note { get; set;  }
-
-        public int shippedbyId { get; set; }
-        public string shippedBy { get; set; }
         public string address { get; set; }
         public int Total { get; set; }
     }

@@ -81,12 +81,12 @@ namespace _1bite
             sqlcom2.ExecuteNonQuery();
             conn.Close();
         }
-        public static void addOrder(int staffId, int discount, string note, int statusId, int shippedbyId, string address, List<OrderDetails> lod)
+        public static void addOrder(int staffId, int discount, string note, int statusId, string address, List<OrderDetails> lod)
         {
             int orderId;
             var url = "server=137.59.106.96 ; database =dBforStudying;uid=uonga0.HzL12153;pwd=Tuong1998!; MultipleActiveResultSets=True";
-            var sql = "insert into [Order] OUTPUT inserted.orderID values (@staffId, GETDATE(), @discount, @note, @statusId, @shippedbyId, @customerAddress)";
-            var insertOD = "insert into Order_Item values (@orderID, @dishID, @dishAmount)";
+            var sql = "insert into [Order] OUTPUT inserted.orderID values (@staffId, GETDATE(), @discount, @note, @statusId, @customerAddress, null)";
+            var insertOD = "insert into Order_Item values (@orderID, @dishID, @dishAmount, 6)";
             var conn = new SqlConnection(url);
             var sqlcom = new SqlCommand(sql, conn);
             var sqlcom2 = new SqlCommand(insertOD, conn);
@@ -102,7 +102,6 @@ namespace _1bite
                 sqlcom.Parameters.Add("@note", SqlDbType.NVarChar).Value = note;
             }
             sqlcom.Parameters.Add("@statusId", SqlDbType.Int).Value = statusId;
-            sqlcom.Parameters.Add("@shippedbyId", SqlDbType.Int).Value = shippedbyId;
             if (address == null)
             {
                 sqlcom.Parameters.Add("@customerAddress", SqlDbType.NVarChar).Value = DBNull.Value;
@@ -231,21 +230,6 @@ namespace _1bite
             string sql = "Select productUnit from Product where productId = @id";
             var sqlcom = new SqlCommand(sql, conn);
             sqlcom.Parameters.Add("@id", SqlDbType.Int).Value = id;
-            SqlDataReader sqlRead = sqlcom.ExecuteReader();
-            sqlRead.Read();
-            name = sqlRead[0].ToString();
-            conn.Close();
-            return name;
-        }
-        public static string GetShipNameWithID(int id)
-        {
-            string name;
-            var url = "server=137.59.106.96 ; database =dBforStudying;uid=uonga0.HzL12153;pwd=Tuong1998!";
-            var conn = new SqlConnection(url);
-            conn.Open();
-            string sql = "Select Shipper from Shipper where ShipperId = @Shipperid";
-            var sqlcom = new SqlCommand(sql, conn);
-            sqlcom.Parameters.Add("@ShipperId", SqlDbType.Int).Value = id;
             SqlDataReader sqlRead = sqlcom.ExecuteReader();
             sqlRead.Read();
             name = sqlRead[0].ToString();
@@ -455,7 +439,6 @@ namespace _1bite
                       discount = Convert.ToInt32(dr["discount"]),
                       note = dr["note"].ToString(),
                       statusId = Convert.ToInt32(dr["statusID"]),
-                      shippedbyId = Convert.ToInt32(dr["shippedbyId"]),
                       address = dr["customerAddress"].ToString()
                   }).ToList();
             return lo;
@@ -476,7 +459,6 @@ namespace _1bite
                       discount = Convert.ToInt32(dr["discount"]),
                       note = dr["note"].ToString(),
                       statusId = Convert.ToInt32(dr["statusID"]),
-                      shippedbyId = Convert.ToInt32(dr["shippedbyId"]),
                       address = dr["customerAddress"].ToString()
                   }).ToList();
             return lo;

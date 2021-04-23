@@ -7,26 +7,26 @@
 {
     foreach (var item in Model.importDetail)
     {
-        <tr>
-            <td scope="row">
-                @item.productId
-            </td>
-            <td scope="row">
-                @item.productName
-            </td>
-            <td scope="row">
-                @item.amount
-            </td>
-            <td scope="row">
-                @item.unitPrice
-            </td>
-            <td scope="row">
-                @item.paid
-            </td>
-            <td>
-                <button onclick="deleteProduct(@item.productId)" data-id="@item.productId">Xoá món</button>
-            </td>
-        </tr>
+<tr>
+    <td scope="row">
+        @item.productId
+    </td>
+    <td scope="row">
+        @item.productName
+    </td>
+    <td scope="row">
+        @item.amount
+    </td>
+    <td scope="row">
+        @item.unitPrice
+    </td>
+    <td scope="row">
+        @item.paid
+    </td>
+    <td>
+        <button onclick="deleteProduct(@item.productId)" data-id="@item.productId">Xoá món</button>
+    </td>
+</tr>
     }
 }
 <script type="text/javascript" class="init">

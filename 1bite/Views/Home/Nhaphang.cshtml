@@ -10,6 +10,8 @@
 <link href="~/Content/css/Banhang.css" rel="stylesheet" />
 <html>
 <head>
+    <link href="~/Content/bootstrap/bootstrap-reboot.css" rel="stylesheet" />
+    <link href="~/Content/css/Banhang.css" rel="stylesheet" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -24,6 +26,7 @@
     <script language="JavaScript" type="text/javascript" src="/js/sprinkle.js"></script>
     <script type="text/javascript" class="init">
         function addGoods() {
+            alert($("#selectproduct option:selected").val() + $("#productamount").val() + $("#unitprice").val() + $("#product-discount").val());
             $.ajax({
                 url: '/home/addProduct',
                 data: {
@@ -35,13 +38,17 @@
                 type: 'POST',
                 cache: false,
                 success: function (result) {
-                    $('#ImportListProduct').empty().append(result)
+                    alert("success");
+                    $('#ImportListProduct').empty().append(result);
+                },
+                error: function (err) {
+                    alert('Error occured ' + err.status);
                 }
             });
         }
         function discount() {
             var url = '@Url.Action("ImportDiscount", "Home")';
-            $.post(url, { 'discount': $('#discount').val(), 'shipFee': $('#shipFee').val()}, function (view) {
+            $.post(url, { 'discount': $('#discount').val(), 'shipFee': $('#shipFee').val() }, function (view) {
                 $("#bill").val(view);
             });
         }
@@ -131,7 +138,7 @@
         Giảm giá:
         <input name="discount" id="discount" min="0" step="any" type="number" value="0" onkeypress="discount(this.val)">
         Tiền Ship:
-        <input name="shipFee" id="shipFee" min="0" step="any" type="number" value="0" onkeypress="discount(this.val)">
+        <input name="shipFee" id="shipFee" min="0" step="any" type="number" value="0">
         Nguồn hàng:
         <select id="select-source" name="select-source">
             @foreach (Source product in Model.Source)
@@ -146,18 +153,20 @@
     <button type="button" onclick="window.location.href = '/Home/Nhaphang'" title="Huỷ dữ liệu"> Huỷ bỏ</button>
     <input type="button" value="Xác nhận" onclick="addImport()" /><br />
     <div class="importHistory" 4>
+        <h4>Hàng nhập hôm nay:</h4>
+        <a href="/Home/ViewAllImport">Xem tất cả đơn hàng</a>
         <table cellpadding="1" cellspacing="1" name="Order" id="Order" style="width:100%">
-            <h4>Hàng nhập hôm nay:</h4>
-            <a href="/Home/ViewAllImport">Xem tất cả đơn hàng</a>
-            <tr>
-                <th>Mã đơn</th>
-                <td>Thời gian</td>
-                <td>Giảm giá</td>
-                <th>Phí ship</th>
-                <th>Nguồn hàng</th>
-                <td>Tổng tiền</td>
-                <td>Điều khiển</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Thời gian</th>
+                    <th>Giảm giá</th>
+                    <th>Phí ship</th>
+                    <th>Nguồn hàng</th>
+                    <th>Tổng tiền</th>
+                    <th>Điều khiển</th>
+                </tr>
+            </thead>
             @foreach (Import order in Model.Import)
             {
                 <tr>

@@ -136,7 +136,6 @@ namespace _1bite.Controllers
                     {
                         o.note = "Không có ghi chú";
                     }
-                    o.shippedBy = AccountDAO.GetShipNameWithID(o.shippedbyId);
                     lod = AccountDAO.getOrderDetailsWithId(o.id);
                     foreach (OrderDetails od in lod)
                     {
@@ -170,7 +169,6 @@ namespace _1bite.Controllers
                     {
                         o.note = "Không có ghi chú";
                     }
-                    o.shippedBy = AccountDAO.GetShipNameWithID(o.shippedbyId);
                     List<OrderDetails> lod = AccountDAO.getOrderDetailsWithId(o.id);
                     foreach (OrderDetails od in lod)
                     {
@@ -390,13 +388,15 @@ namespace _1bite.Controllers
             }
             else
             {
-                importDetail = new ImportDetail();
-                importDetail.productId = id;
-                importDetail.productName = AccountDAO.GetProductNameWithID(id);
-                importDetail.amount = amount;
-                importDetail.discounted = discount;
-                importDetail.unitPrice = unitPrice;
-                importDetail.paid = (amount * unitPrice) - discount;
+                importDetail = new ImportDetail
+                {
+                    productId = id,
+                    productName = AccountDAO.GetProductNameWithID(id),
+                    amount = amount,
+                    discounted = discount,
+                    unitPrice = unitPrice,
+                    paid = (amount * unitPrice) - discount
+                };
                 idl.Add(importDetail);
             }
             System.Web.HttpContext.Current.Session["nhaphangg"] = idl;
@@ -514,7 +514,7 @@ namespace _1bite.Controllers
             return PartialView(mymodel);
         }
 
-        public ActionResult addOrder(int discount, string type, string note,int shippedbyId, string address)
+        public ActionResult addOrder(int discount, string type, string note, string address)
         {
             List<OrderDetails> add = (List<OrderDetails>)System.Web.HttpContext.Current.Session["dathang"];
             int discounted = Discounted(discount, type);
@@ -525,7 +525,7 @@ namespace _1bite.Controllers
                 user_name = reqCookies["userName"].ToString();
             }
             int staffId = Convert.ToInt32(AccountDAO.GetStaffId(user_name));
-            AccountDAO.addOrder(staffId,discounted,note,1,shippedbyId,address,add);
+            AccountDAO.addOrder(staffId,discounted,note,6,address,add); //4 mean the dish is cooking 6 mean waiting for confirm in the kitchen
             return RedirectToAction("Banhang");
         }
         public ActionResult addImport(int discount, int shipFee, int sourceId)

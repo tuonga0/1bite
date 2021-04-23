@@ -8,7 +8,6 @@ namespace _1bite.Models
     public class ImportDetail
     {
         public int importId { get; set; }
-
         public int productId { get; set; }
         public string productName { get; set; }
         public int unitPrice { get; set; }

@@ -9,10 +9,10 @@
 @{
     Layout = null;
 }
-<link href="~/Content/bootstrap/bootstrap-reboot.css" rel="stylesheet" />
-<link href="~/Content/css/Banhang.css" rel="stylesheet" />
 <html>
 <head>
+    <link href="~/Content/bootstrap/bootstrap-reboot.css" rel="stylesheet" />
+    <link href="~/Content/css/Banhang.css" rel="stylesheet" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -43,13 +43,19 @@
         }
         function discount() {
             var url = '@Url.Action("ChangeTheValue", "Home")';
-            $.post(url, { 'model': $('form').serialize(), 'discount': $('#discount').val(), 'type': $("#select-discount option:selected").val(), 'address': $("customeraddress").val() }, function (view) {
+            $.post(url, { 'model': $('form').serialize(), 'discount': $('#discount').val(), 'type': $("#select-discount option:selected").val() }, function (view) {
                 $("#bill").val(view);
             });
         }
         function addOrder() {
+            if (!$("#OrderListDish tr").length)
+            {
+                alert("Need to add dish first");
+                return;
+            }
             var url = '@Url.Action("addOrder", "Home")';
-            $.post(url, { 'discount': $('#discount').val(), 'type': $("#select-discount option:selected").val(), 'note': $("note").text(), 'shippedbyId': $("#selectship option:selected").val(), 'address': $("address").val() }, function (view) {
+            alert("add");
+            $.post(url, { 'discount': $('#discount').val(), 'type': $("#select-discount option:selected").val(), 'note': $("#note").val() }, function (view) {
                 location.reload();
             });
         }
@@ -131,7 +137,6 @@
             <option value="VND">VND</option>
             <option value="%">%</option>
         </select>
-        <input name="customeraddress" id="customeraddress" step="any" type="text" placeholder="Địa chỉ khách hàng">
         <input name="note" id="note" step="any" type="text" placeholder="Ghi chú">
         Tổng tiền của đơn hàng:
         <button type="button" onclick="discount()">Làm mới</button>
@@ -140,35 +145,40 @@
     <button type="button" onclick="window.location.href = '/Home/Banhang'" title="Về trang chủ"> Huỷ bỏ</button>
     <input type="button" value="Xác nhận" onclick="addOrder()" /><br />
     <div class="orderHistory" 4>
+        <h4>Đơn hôm nay:</h4>
+        <a href="/Home/ViewAllOrders">Xem tất cả đơn hàng</a>
         <table cellpadding="1" cellspacing="1" name="Order" id="Order" style="width:100%">
-            <h4>Đơn hôm nay:</h4>
-            <a href="/Home/ViewAllOrders">Xem tất cả đơn hàng</a>
-            <tr>
-                <th>Mã đơn</th>
-                <th>Tình trạng</th>
-                <td>Nhân viên</td>
-                <td>Thời gian</td>
-                <td>Giảm giá</td>
-                <td>Ghi chú</td>
-                <td>Tiền đơn hàng</td>
-                <td>Điều khiển</td>
-            </tr>
-            @foreach (Order order in Model.Order)
-            {
+            <thead>
                 <tr>
-                    <td>@order.id</td>
-                    <td>@order.status</td>
-                    <td>@order.staffName</td>
-                    <td>@order.Date</td>
-                    <td>@order.discount</td>
-                    <td>@order.note</td>
-                    <td>@order.Total</td>
-                    <td>
-                        <button onclick="seeOrd('@order.id')" data-id="@order.id">Xem Đơn</button>
-                        <button onclick="delOrd('@order.id')" data-id="@order.id">Xoá Đơn</button>
-                    </td>
+                    <th>Mã đơn</th>
+                    <th>Tình trạng</th>
+                    <td>Nhân viên</td>
+                    <td>Thời gian</td>
+                    <td>Giảm giá</td>
+                    <td>Ghi chú</td>
+                    <td>Tiền đơn hàng</td>
+                    <td>Điều khiển</td>
                 </tr>
-            }
+            </thead>
+            <tbody>
+                @foreach (Order order in Model.Order)
+                {
+                    <tr>
+                        <td>@order.id</td>
+                        <td>@order.status</td>
+                        <td>@order.staffName</td>
+                        <td>@order.Date</td>
+                        <td>@order.discount</td>
+                        <td>@order.note</td>
+                        <td>@order.Total</td>
+                        <td>
+                            <button onclick="seeOrd('@order.id')" data-id="@order.id">Xem Đơn</button>
+                            <button onclick="delOrd('@order.id')" data-id="@order.id">Xoá Đơn</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
         </table>
         <table class="display" style="width:100%">
             <caption>Danh sách món của đơn hàng</caption>
@@ -187,46 +197,3 @@
     </div>
 </body>
 </html>
-@*<script>
-        var Today = new Date();
-        var date = document.querySelector(".date");
-
-        var time = document.querySelector(".time");
-
-        time.innerHTML = Today.getTime();
-        date.innerHTML = Today;
-    </script>*@
-<script>
-<!--
-
-    /*By JavaScript Kit
-    http://javascriptkit.com
-    Credit MUST stay intact for use
-    */
-
-    //function show2() {
-    //    if (!document.all && !document.getElementById)
-    //        return
-    //    thelement = document.getElementById ? document.getElementById("tick2") : document.all.tick2
-    //    var Digital = new Date()
-    //    var hours = Digital.getHours()
-    //    var minutes = Digital.getMinutes()
-    //    var seconds = Digital.getSeconds()
-    //    var dn = "PM"
-    //    if (hours < 12)
-    //        dn = "AM"
-    //    if (hours > 12)
-    //        hours = hours - 12
-    //    if (hours == 0)
-    //        hours = 12
-    //    if (minutes <= 9)
-    //        minutes = "0" + minutes
-    //    if (seconds <= 9)
-    //        seconds = "0" + seconds
-    //    var ctime = hours + ":" + minutes + ":" + seconds + " " + dn
-    //    thelement.innerHTML = "<b style='font-size:14;color:black;'>" + ctime + "</b>"
-    //    setTimeout("show2()", 1000)
-    //}
-    //window.onload = show2
-//-->
-</script>

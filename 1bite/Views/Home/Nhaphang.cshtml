@@ -26,7 +26,6 @@
     <script language="JavaScript" type="text/javascript" src="/js/sprinkle.js"></script>
     <script type="text/javascript" class="init">
         function addGoods() {
-            alert($("#selectproduct option:selected").val() + $("#productamount").val() + $("#unitprice").val() + $("#product-discount").val());
             $.ajax({
                 url: '/home/addProduct',
                 data: {
@@ -38,7 +37,6 @@
                 type: 'POST',
                 cache: false,
                 success: function (result) {
-                    alert("success");
                     $('#ImportListProduct').empty().append(result);
                 },
                 error: function (err) {
@@ -87,84 +85,81 @@
     <title>Nhập hàng</title>
 </head>
 <body>
-    <a href="/Home/Manage">Quay lại</a>
-    <h1>Nhập hàng</h1>
+    <a href="/Home/Manage">Go back</a>
+    <h1>Import</h1>
     <div class="inputOrder">
-        <h4 class="sellerName">Người nhập: @ViewBag.messagestaffname</h4>
-        <h4 class="current-time">
-            Ngày:   <span id=tick2></span>
-        </h4>
-        Tên hàng:
+        <h4 class="sellerName">Staff: @ViewBag.messagestaffname</h4>
+        <h4>Product Name:</h4>
         <select id="selectproduct" name="selectproduct">
             @foreach (Product product in Model.Product)
             {
                 <option value="@product.id">@product.name (@product.unit)</option>
             }
         </select>
-        Số lượng:
+        <h4>Amount:</h4>
         <input name="productamount" id="productamount" min="1" step="any" type="number" value="1">
-        Giá mỗi đơn vị
+        <h4>Unit Price:</h4>
         <input name="unitprice" id="unitprice" min="1" step="any" type="number" value="1">
-        Giảm giá riêng:
+        <h4>Product's Discount:</h4>
         <input name="product-discount" id="product-discount" step="any" type="number" value="0">
-        <button id="addRow" onclick="addGoods(), discount()">Thêm nguyên liệu</button>
+        <button id="addRow" onclick="addGoods(), discount()">Add Product</button>
         <table class="display" style="width:100%">
-            <caption>Danh sách vật liệu của đơn hàng</caption>
+            <caption>Product list of Import order</caption>
             <thead>
                 <tr>
                     <th>
                         ID
                     </th>
                     <th scope="col">
-                        Tên vật liệu
+                        Product Name
                     </th>
                     <th scope="col">
-                        Số lượng
+                        Amount
                     </th>
                     <th scope="col">
-                        Giá tiền
+                        Price
                     </th>
                     <th scope="col">
-                        Tổng tiền
+                        Total
                     </th>
-                    <th>Điều khiển</th>
+                    <th>Control</th>
                 </tr>
             </thead>
             <tbody id="ImportListProduct">
             </tbody>
         </table>
     </div>
-    <div class="orderOverallInformation">
-        Giảm giá:
+    <div class="importOverallInformation">
+        <h4>Overall discount:</h4>
         <input name="discount" id="discount" min="0" step="any" type="number" value="0" onkeypress="discount(this.val)">
-        Tiền Ship:
-        <input name="shipFee" id="shipFee" min="0" step="any" type="number" value="0">
-        Nguồn hàng:
+        <h4>Ship fee:</h4>
+        <input name="shipFee" id="shipFee" min="0" step="any" type="number" value="0" >
+        <h4>Source:</h4>
         <select id="select-source" name="select-source">
             @foreach (Source product in Model.Source)
             {
                 <option value="@product.id">@product.source</option>
             }
         </select>
-        Tổng tiền của đơn hàng:
+        <h4>Total cost:</h4>
         <button type="button" onclick="discount()">Làm mới</button>
-        <input name="bill" id="bill" min="0" step="any" type="number" value="0" readonly="readonly">VND
+        <input name="bill" id="bill" min="0" step="any" type="number" value="0" readonly="readonly"><p>VND</p>
     </div>
-    <button type="button" onclick="window.location.href = '/Home/Nhaphang'" title="Huỷ dữ liệu"> Huỷ bỏ</button>
-    <input type="button" value="Xác nhận" onclick="addImport()" /><br />
+    <button type="button" onclick="window.location.href = '/Home/Nhaphang'" title="Refresh data">Cancel</button>
+    <input type="button" value="Confirm" onclick="addImport()" /><br />
     <div class="importHistory" 4>
-        <h4>Hàng nhập hôm nay:</h4>
-        <a href="/Home/ViewAllImport">Xem tất cả đơn hàng</a>
+        <h4>Imported today</h4>
+        <a href="/Home/ViewAllImport">See all Imported</a>
         <table cellpadding="1" cellspacing="1" name="Order" id="Order" style="width:100%">
             <thead>
                 <tr>
-                    <th>Mã đơn</th>
-                    <th>Thời gian</th>
-                    <th>Giảm giá</th>
-                    <th>Phí ship</th>
-                    <th>Nguồn hàng</th>
-                    <th>Tổng tiền</th>
-                    <th>Điều khiển</th>
+                    <th>ID</th>
+                    <th>Time</th>
+                    <th>Discount</th>
+                    <th>Ship fee</th>
+                    <th>Source</th>
+                    <th>Total</th>
+                    <th>Control</th>
                 </tr>
             </thead>
             @foreach (Import order in Model.Import)
@@ -177,24 +172,24 @@
                     <td>@order.source</td>
                     <td>@order.total</td>
                     <td>
-                        <button onclick="seeImport('@order.id')" data-id="@order.id">Xem Đơn</button>
-                        <button onclick="delImport('@order.id')" data-id="@order.id">Xoá Đơn</button>
+                        <button onclick="seeImport('@order.id')" data-id="@order.id">See Import</button>
+                        <button onclick="delImport('@order.id')" data-id="@order.id">Delete</button>
                     </td>
                 </tr>
             }
         </table>
         <table class="display" style="width:100%">
-            <caption>Danh sách món của đơn hàng</caption>
+            <caption>Product list of Import order</caption>
             <thead>
                 <tr>
-                    <th>Mã đơn</th>
-                    <th>Mã hàng</th>
-                    <th>Tên hàng</th>
-                    <th>Đơn vị</th>
-                    <th>Giá tiền mỗi đơn vị</th>
-                    <th>Số lượng</th>
-                    <th>Giảm giá</th>
-                    <th>Tổng tiền</th>
+                    <th>Import ID</th>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Unit</th>
+                    <th>Unit Price</th>
+                    <th>Amount</th>
+                    <th>Discount</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody id="ImportDetail">

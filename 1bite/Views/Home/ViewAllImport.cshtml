@@ -26,13 +26,13 @@
         <table id="table_id" class="display">
             <thead>
                 <tr>
-                    <th>Mã đơn</th>
-                    <td>Thời gian</td>
-                    <td>Giảm giá</td>
-                    <th>Phí ship</th>
-                    <th>Nguồn hàng</th>
-                    <td>Tổng tiền</td>
-                    <td>Điều khiển</td>
+                    <th>Import Id</th>
+                    <th>Import Time</th>
+                    <th>Discount</th>
+                    <th>Ship fee</th>
+                    <th>Source</th>
+                    <th>Total</th>
+                    <th>Control</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,8 +48,8 @@
                             <td>@order.source</td>
                             <td>@order.total</td>
                             <td>
-                                <button onclick="seeImport('@order.id')" data-id="@order.id">Xem Đơn</button>
-                                <button onclick="delImport('@order.id')" data-id="@order.id">Xoá Đơn</button>
+                                <button onclick="seeImport('@order.id')" data-id="@order.id">See Import</button>
+                                <button onclick="delImport('@order.id')" data-id="@order.id">Delete Import</button>
                             </td>
                         </tr>
                     }
@@ -57,17 +57,17 @@
             </tbody>
         </table>
         <table class="display" style="width:100%">
-            <caption>Danh sách món của đơn hàng</caption>
+            <caption>Product List</caption>
             <thead>
                 <tr>
-                    <th>Mã đơn</th>
-                    <th>Mã hàng</th>
-                    <th>Tên hàng</th>
-                    <th>Đơn vị</th>
-                    <th>Giá tiền mỗi đơn vị</th>
-                    <th>Số lượng</th>
-                    <th>Giảm giá</th>
-                    <th>Tổng tiền</th>
+                    <th>Import ID</th>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Unit</th>
+                    <th>Unit Price</th>
+                    <th>Amount</th>
+                    <th>Discount</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody id="ImportDetail">

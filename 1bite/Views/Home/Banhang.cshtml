@@ -54,7 +54,6 @@
                 return;
             }
             var url = '@Url.Action("addOrder", "Home")';
-            alert("add");
             $.post(url, { 'discount': $('#discount').val(), 'type': $("#select-discount option:selected").val(), 'note': $("#note").val() }, function (view) {
                 location.reload();
             });
@@ -88,13 +87,10 @@
     <title>Bán hàng</title>
 </head>
 <body>
-    <a href="/Home/Manage">Quay lại</a>
-    <h1>Bán hàng</h1>
+    <a href="/Home/Manage">Go back</a>
+    <h1>New Order</h1>
     <div class="inputOrder">
-        <h4 class="sellerName">Người bán: @ViewBag.messagestaffname</h4>
-        <h4 class="current-time">
-            Ngày:   <span id=tick2></span>
-        </h4>
+        <h4 class="sellerName">Staff: @ViewBag.messagestaffname</h4>
         @*Thêm Món*@
         <select id="selectdish" name="selectdish">
             @foreach (Dish dish in Model.Dish)
@@ -103,27 +99,27 @@
             }
         </select>
         <input name="dishamount" id="dishamount" min="1" step="any" type="number" value="1">
-        <button id="addRow" onclick="addDishjs(); discount()">Thêm món</button>
+        <button id="addRow" onclick="addDishjs(); discount()">Add</button>
         <table class="display" style="width:100%">
-            <caption>Danh sách món của đơn hàng</caption>
+            <caption>Dish list of Order</caption>
             <thead>
                 <tr>
                     <th>
                         ID
                     </th>
                     <th scope="col">
-                        Tên món
+                        Dish Name
                     </th>
                     <th scope="col">
-                        Số lượng
+                        Amount
                     </th>
                     <th scope="col">
-                        Giá tiền
+                        Price
                     </th>
                     <th scope="col">
-                        Tổng tiền
+                        Total
                     </th>
-                    <th>Điều khiển</th>
+                    <th>Control</th>
                 </tr>
             </thead>
             <tbody id="OrderListDish">
@@ -131,33 +127,34 @@
         </table>
     </div>
     <div class="orderOverallInformation">
-        Giảm giá:
+        <h4>Discount:</h4>
         <input name="discount" id="discount" min="1" step="any" type="number" value="0" onkeypress="discount(this.val)">
         <select id="select-discount" name="select-discount" onchange="discount()">
             <option value="VND">VND</option>
             <option value="%">%</option>
         </select>
-        <input name="note" id="note" step="any" type="text" placeholder="Ghi chú">
-        Tổng tiền của đơn hàng:
-        <button type="button" onclick="discount()">Làm mới</button>
-        <input name="bill" id="bill" min="0" step="any" type="number" value="0" readonly="readonly">VND
+        <h4>Note:</h4>
+        <input name="note" id="note" step="any" type="text" placeholder="Note">
+        <h4>Total cost of Order:</h4>
+        <button type="button" onclick="discount()">Refresh</button>
+        <input name="bill" id="bill" min="0" step="any" type="number" value="0" readonly="readonly"><p>VND</p>
     </div>
-    <button type="button" onclick="window.location.href = '/Home/Banhang'" title="Về trang chủ"> Huỷ bỏ</button>
-    <input type="button" value="Xác nhận" onclick="addOrder()" /><br />
+    <button type="button" onclick="window.location.href = '/Home/Banhang'" title="Về trang chủ">Cancel</button>
+    <input type="button" value="Confirm" onclick="addOrder()" /><br />
     <div class="orderHistory" 4>
-        <h4>Đơn hôm nay:</h4>
-        <a href="/Home/ViewAllOrders">Xem tất cả đơn hàng</a>
+        <h4>Order today:</h4>
+        <a href="/Home/ViewAllOrders">See all Order</a>
         <table cellpadding="1" cellspacing="1" name="Order" id="Order" style="width:100%">
             <thead>
                 <tr>
-                    <th>Mã đơn</th>
-                    <th>Tình trạng</th>
-                    <td>Nhân viên</td>
-                    <td>Thời gian</td>
-                    <td>Giảm giá</td>
-                    <td>Ghi chú</td>
-                    <td>Tiền đơn hàng</td>
-                    <td>Điều khiển</td>
+                    <th>Order ID</th>
+                    <th>Status</th>
+                    <th>Staff</th>
+                    <th>Time</th>
+                    <th>Discount</th>
+                    <th>Note</th>
+                    <th>Order money</th>
+                    <th>Control</th>
                 </tr>
             </thead>
             <tbody>
@@ -172,23 +169,22 @@
                         <td>@order.note</td>
                         <td>@order.Total</td>
                         <td>
-                            <button onclick="seeOrd('@order.id')" data-id="@order.id">Xem Đơn</button>
-                            <button onclick="delOrd('@order.id')" data-id="@order.id">Xoá Đơn</button>
+                            <button onclick="seeOrd('@order.id')" data-id="@order.id">See order</button>
+                            <button onclick="delOrd('@order.id')" data-id="@order.id">Delete order</button>
                         </td>
                     </tr>
                 }
             </tbody>
-
         </table>
         <table class="display" style="width:100%">
-            <caption>Danh sách món của đơn hàng</caption>
+            <caption>Order dish's list</caption>
             <thead>
                 <tr>
-                    <th>Mã đơn</th>
-                    <th>Tên món</th>
-                    <th>Giá món</th>
-                    <th>Số lượng</th>
-                    <th>Tổng tiền</th>
+                    <th>Order ID</th>
+                    <th>Dish Name</th>
+                    <th>Dish Price</th>
+                    <th>Amount</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody id="OrderDetail">

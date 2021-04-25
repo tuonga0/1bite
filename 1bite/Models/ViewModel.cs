@@ -10,7 +10,9 @@ namespace _1bite.Models
         public List<OrderDetails> OrderDetails { get; set; }
         public List<Order> Order { get; set; }
         public int total { get; set; }
-        public int profit { get; set; }
+        public string profit { get; set; }
+
+        public List<Rank> Rank { get; set; }
         public List<Dish> Dish { get; set; }
         public List<DishType> DishType { get; set; }
         public List<Account> Account { get; set; }

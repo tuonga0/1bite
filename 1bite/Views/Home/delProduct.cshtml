@@ -24,7 +24,7 @@
                 @item.paid
             </td>
             <td>
-                <button onclick="deleteProduct(@item.productId)" data-id="@item.productId">Xoá món</button>
+                <button onclick="deleteProduct('@item.productId'); discount()" data-id="@item.productId">Xoá món</button>
             </td>
         </tr>
     }
@@ -38,21 +38,17 @@
             data: { 'id': id },
             cache: false,
             success: function (result) {
-                alert(result);
                 $('#ImportListProduct').empty().append(result);
-            },
-            error: function (result) {
-                alert(result.responseText);
             }
         });
         var url = '@Url.Action("ImportDiscount", "Home")';
-        $.post(url, { 'discount': $('#discount').val() }, function (view) {
+        $.post(url, $('form').serialize(), function (view) {
             $("#bill").val(view);
         });
     }
     function discount() {
         var url = '@Url.Action("ImportDiscount", "Home")';
-        $.post(url, { 'discount': $('#discount').val(),'shipFee': $('#shipFee').val() }, function (view) {
+        $.post(url, {'discount': $('#discount').val(), 'shipFee': $('#shipFee').val() }, function (view) {
             $("#bill").val(view);
         });
     }

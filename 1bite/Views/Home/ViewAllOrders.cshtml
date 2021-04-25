@@ -26,14 +26,14 @@
         <table id="table_id" class="display">
             <thead>
                 <tr>
-                    <th>Mã đơn</th>
-                    <th>Tình trạng</th>
-                    <td>Nhân viên</td>
-                    <td>Thời gian</td>
-                    <td>Giảm giá</td>
-                    <td>Ghi chú</td>
-                    <td>Tiền đơn hàng</td>
-                    <td>Điều khiển</td>
+                    <th>Order ID</th>
+                    <th>Status</th>
+                    <th>Staff</th>
+                    <th>Time</th>
+                    <th>Discount</th>
+                    <th>Note</th>
+                    <th>Total</th>
+                    <th>Control</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,8 +50,8 @@
                             <td>@order.note</td>
                             <td>@order.Total</td>
                             <td>
-                                <button onclick="seeOrd('@order.id')" data-id="@order.id">Xem Đơn</button>
-                                <button onclick="delOrd('@order.id')" data-id="@order.id">Xoá Đơn</button>
+                                <button onclick="seeOrd('@order.id')" data-id="@order.id">See Order</button>
+                                <button onclick="delOrd('@order.id')" data-id="@order.id">Delete Order</button>
                             </td>
                         </tr>
                     }
@@ -59,14 +59,14 @@
             </tbody>
         </table>
         <table class="display" style="width:100%" id="table_id">
-            <caption>Danh sách món của đơn hàng</caption>
+            <caption>Dish List of Order</caption>
             <thead>
                 <tr>
-                    <th>Mã đơn</th>
-                    <th>Tên món</th>
-                    <th>Giá món</th>
-                    <th>Số lượng</th>
-                    <th>Tổng tiền</th>
+                    <th>ID</th>
+                    <th>Dish Name</th>
+                    <th>Dish Price</th>
+                    <th>Amount</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody id="OrderDetail">

@@ -8,6 +8,7 @@ using System.Data;
 using System.Configuration;
 using _1bite.Models;
 using System.Net;
+using System.Globalization;
 
 namespace _1bite.Controllers
 {
@@ -281,28 +282,36 @@ namespace _1bite.Controllers
         }
         public ActionResult QuanliAccount()
         {
-            if (Request.Cookies["userinfo"] != null)
+            System.Web.HttpContext.Current.Session.RemoveAll();
+            string user_name = string.Empty;
+            HttpCookie reqCookies = Request.Cookies["userinfo"];
+            if (reqCookies != null)
             {
-                HttpCookie reqCookies = Request.Cookies["userinfo"];
+                user_name = reqCookies["userName"].ToString();
+            }
+            if (AccountDAO.GetStaffId(user_name) == null)
+            {
+                var c = new HttpCookie("userinfo");
+                c.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(c);
+                return View("Error");
+            }
+            ViewBag.messagestaffname = AccountDAO.GetStaffName(user_name);
+            if (reqCookies != null)
+            {
                 if (AccountDAO.GetStaffId(reqCookies["userName"].ToString()) == null)
                 {
                     var c = new HttpCookie("userinfo");
                     c.Expires = DateTime.Now.AddDays(-1);
                     Response.Cookies.Add(c);
-                    return RedirectToAction("Index");
+                    return View("Error");
                 }
+                mymodel.Rank = AccountDAO.getRank();
                 List<Account> la = new List<Account>();
                 la = AccountDAO.GetAccount();
                 foreach (Account a in la)
                 {
-                    if (a.rank == 1)
-                    {
-                        a.role = "Admin";
-                    }
-                    else
-                    {
-                        a.role = "Nhân viên";
-                    }
+                    a.role = AccountDAO.getRankwithId(a.rank);
                 }
                 mymodel.Account = la;
                 return View(mymodel);
@@ -333,7 +342,8 @@ namespace _1bite.Controllers
                 }
                 mymodel.OrderDetails = lod;
                 profit = profit - AccountDAO.GetAllDiscounted() - AccountDAO.GetSpend() + AccountDAO.GetBuyingDiscount();
-                mymodel.profit = profit;
+                CultureInfo ci = new CultureInfo("vi-VN");
+                mymodel.profit = profit.ToString("C", ci);
                 return View(mymodel);
             }
             return View("Error");
@@ -409,7 +419,7 @@ namespace _1bite.Controllers
             return Json(Discount(discount, type));
         }
         [HttpPost]
-        public ActionResult ImportDiscount(int discount, int shipFee)
+        public ActionResult ImportDiscount(ViewModel model, int discount, int shipFee)
         {
             int bill = 0;
             List<ImportDetail> del = (List<ImportDetail>)System.Web.HttpContext.Current.Session["nhaphangg"];
@@ -552,9 +562,9 @@ namespace _1bite.Controllers
             return RedirectToAction("QuanliDish");
         }
 
-        public ActionResult addAccount(string username, string password, string name, string phone, string email)
+        public ActionResult addAccount(string username, string password, string name, string phone, string email,int rankId)
         {
-            AccountDAO.addAcc(username, password, name, phone, email);
+            AccountDAO.addAcc(username, password, name, phone, email, rankId);
             return RedirectToAction("QuanliAccount");
         }
         public ActionResult DeleteAccount(int id)

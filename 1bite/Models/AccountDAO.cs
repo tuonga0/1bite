@@ -18,6 +18,21 @@ namespace _1bite
             var conn = "server=137.59.106.96 ; database =dBforStudying;uid=uonga0.HzL12153;pwd=Tuong1998!; MultipleActiveResultSets=True"; //DESKTOP-C4SUR0U xem trong SQL
             return new SqlConnection(conn);
         }
+        public static string getRankwithId(int rankId)
+        {
+            string rank;
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=uonga0.HzL12153;pwd=Tuong1998!";
+            var conn = new SqlConnection(url);
+            conn.Open();
+            string sql = "Select rankName from Rank where rankId = @rankid";
+            var sqlcom = new SqlCommand(sql, conn);
+            sqlcom.Parameters.Add("@rankid", SqlDbType.Int).Value = rankId;
+            SqlDataReader sqlRead = sqlcom.ExecuteReader();
+            sqlRead.Read();
+            rank = sqlRead[0].ToString();
+            conn.Close();
+            return rank;
+        }
         public static string EncodePassword(string originalPassword)
         {
             //Declarations
@@ -62,10 +77,10 @@ namespace _1bite
             sqlcom.ExecuteNonQuery();
             conn.Close();
         }
-        public static void addAcc(string acc, string pwd,string name, string phone, string email)
+        public static void addAcc(string acc, string pwd,string name, string phone, string email, int rankId)
         {
             int accId;
-            var sql = "insert into Account OUTPUT inserted.accID values('" + acc + "','" + pwd + "',2,GETDATE())"; //viết kiểu này sẽ bị hack sql injection
+            var sql = "insert into Account OUTPUT inserted.accID values('" + acc + "','" + pwd + "',"+rankId+",GETDATE())"; //viết kiểu này sẽ bị hack sql injection
             var insertStaff = "insert into Staff values (@name,@phone,@email,@id)";
             var conn = setConnection();
             conn.Open();
@@ -127,7 +142,7 @@ namespace _1bite
         {
             int importId;
             var url = "server=137.59.106.96 ; database =dBforStudying;uid=uonga0.HzL12153;pwd=Tuong1998!; MultipleActiveResultSets=True";
-            var sql = "insert into Import OUTPUT inserted.importID values (GETDATE(), @discount, @shipFee, @sourceId, @staffId)";
+            var sql = "insert into Import OUTPUT inserted.importID values (GETDATE(), @discount, @shipFee, @staffId,@sourceId)";
             var insertID = "insert into Import_Product values (@importID, @productID, @unitPrice,@discount,@amount)";
             var conn = new SqlConnection(url);
             var sqlcom = new SqlCommand(sql, conn);
@@ -336,6 +351,21 @@ namespace _1bite
             }).ToList();
             return ld;
         }
+        public static List<Rank> getRank()
+        {
+            String sql = "select rankId,rankName from Rank";
+            var sqlda = new SqlDataAdapter(sql, setConnection());
+            List<Rank> ld = new List<Rank>();
+            DataTable dt = new DataTable();
+            sqlda.Fill(dt);
+            ld = (from DataRow dr in dt.Rows
+                  select new Rank()
+                  {
+                      id = Convert.ToInt32(dr["rankId"]),
+                      rank = dr["rankName"].ToString()
+                  }).ToList();
+            return ld;
+        }
         public static List<DishType> getDishType()
         {
             String sql = "select * from dishtype";
@@ -496,7 +526,7 @@ namespace _1bite
                       username = dr["username"].ToString(),
                       password = dr["password"].ToString(),
                       date = (DateTime) dr["createdDate"],
-                      rank = Convert.ToInt32(dr["rank"])
+                      rank = Convert.ToInt32(dr["rankId"])
                   }).ToList();
             return la;
         }

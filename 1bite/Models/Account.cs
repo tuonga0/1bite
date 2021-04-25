@@ -12,7 +12,7 @@ namespace _1bite.Models
         public string password { get; set; }
         public DateTime date { get; set; }
         public int rank { get; set; }
-
+        public string rankName { get; set; }
         public string role { get; set; }
     }
 }

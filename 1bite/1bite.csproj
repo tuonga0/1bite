@@ -133,6 +133,7 @@
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderDetails.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\Rank.cs" />
     <Compile Include="Models\Source.cs" />
     <Compile Include="Models\Staff.cs" />
     <Compile Include="Models\ViewModel.cs" />

@@ -12,29 +12,37 @@
     <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
-
-    <title>Quản lí tài khoản</title>
+    <link href="~/Content/bootstrap/bootstrap-reboot.css" rel="stylesheet" />
+    <link href="~/Content/css/Banhang.css" rel="stylesheet" />
+    <title>Account Managing</title>
 </head>
 <body>
-    <a href="/Home/Manage">Quay lại</a>
+    <a href="/Home/Manage">Go back</a>
     Logo, Quản lí tài khoản, button Trang chủ
     <div>
-        Thêm tài khoản mới
-        <input name="username" id="username" type="text" placeholder="Tên tài khoản">
-        <input name="password" id="password" type="password" placeholder="Mật khẩu">
-        <input name="name" id="name" type="text" placeholder="Tên nhân viên">
-        <input name="phone" id="phone" type="text" placeholder="Số điện thoại"maxlength="10">
+        <h4>Create Account:</h4>
+        <input name="username" id="username" type="text" placeholder="Username">
+        <input name="password" id="password" type="password" placeholder="Password">
+        <h4>Select Rank:</h4>
+        <select id="selectrank" name="selectrank">
+            @foreach (Rank rank in Model.Rank)
+            {
+                <option value="@rank.id">@rank.rank</option>
+            }
+        </select>
+        <input name="name" id="name" type="text" placeholder="Staff Name">
+        <input name="phone" id="phone" type="text" placeholder="Phone Number" maxlength="10">
         <input name="email" id="email" type="text" placeholder="Email">
-        <input type="button" value="Xác nhận" onclick="addAccount()" />
+        <input type="button" value="Confirm" onclick="addAccount()" />
         <div>
             <table id="table_id" class="display" width="100%">
                 <thead>
                     <tr>
-                        <th>Tài khoản</th>
-                        <th>Mật khẩu</th>
-                        <th>Ngày tạo</th>
-                        <th>Chức vụ</th></td>
-                        <td>Điều khiển</td>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Created Date</th>
+                        <th>Role</th>
+                        <th>Control</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,8 +56,8 @@
                                 <td>@order.date</td>
                                 <td>@order.role</td>
                                 <td>
-                                    <button onclick="seeAccount(@order.id)" data-id="@order.id">Xem thông tin</button>
-                                    <button onclick="delAccount(@order.id)" data-id="@order.id">Xoá tài khoản</button>
+                                    <button onclick="seeAccount(@order.id)" data-id="@order.id">See Information</button>
+                                    <button onclick="delAccount(@order.id)" data-id="@order.id">Delete Account</button>
                                 </td>
                             </tr>
                         }
@@ -58,12 +66,12 @@
             </table>
         </div>
         <table class="display" style="width:100%">
-            <caption>Thông tin nhân viên</caption>
+            <caption>Staff Information</caption>
             <thead>
                 <tr>
-                    <th>Mã nhân viên</th>
-                    <th>Tên nhân viên</th>
-                    <th>Số điện thoại</th>
+                    <th>Staff ID</th>
+                    <th>Staff Name</th>
+                    <th>Phone number</th>
                     <th>Email</th>
                 </tr>
             </thead>
@@ -76,8 +84,8 @@
 <script>
     function addAccount() {
         var url = '@Url.Action("addAccount", "Home")';
-        $.post(url, { 'username': $('#username').val(), 'password': $('#password').val(), 'name': $("#name").val(), 'phone': $("#phone").val(), 'email': $('#email').val() }, function (view) {
-            alert("Thêm thành công")
+        $.post(url, { 'username': $('#username').val(), 'password': $('#password').val(), 'name': $("#name").val(), 'phone': $("#phone").val(), 'email': $('#email').val(),'rankId': $("#selectrank option:selected").val() }, function (view) {
+            alert("Successful")
             location.reload();
         });
     }

@@ -12,33 +12,34 @@
     <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
-
-    <title>Quản lí món ăn</title>
+    <link href="~/Content/bootstrap/bootstrap-reboot.css" rel="stylesheet" />
+    <link href="~/Content/css/Banhang.css" rel="stylesheet" />
+    <title>Dish managing</title>
 </head>
 <body>
-    <a href="/Home/Manage">Quay lại</a>
+    <a href="/Home/Manage">Go back</a>
     Logo, Quản lí Món ăn, button Trang chủ
     <div>
-        Thêm món mới
-        <input name="Name" id="Name" type="text" placeholder="Tên món ăn">
+        <h4>Add new dish:</h4>
+        <input name="Name" id="Name" type="text" placeholder="Dish Name">
         <select id="select-dishtype" name="select-dishtype">
             @foreach (DishType dish in Model.DishType)
             {
                 <option value="@dish.id">@dish.type</option>
             }
         </select>
-        <input name="price" id="price" min="1" step="any" type="number" value="1">VND
-        <input name="des" id="des" type="text" placeholder="Mô tả">
-        <input type="button" value="Xác nhận" onclick="addDish()" />
+        <input name="price" id="price" min="1" step="any" type="number" value="1"><p>VND</p>
+        <input name="des" id="des" type="text" placeholder="Describe">
+        <input type="button" value="Confirm" onclick="addDish()" />
         <table id="table_id" class="display" width="100%">
             <thead>
                 <tr>
-                    <th>Mã món</th>
-                    <th>Tên món</th>
-                    <td>Giá món(VND)</td>
-                    <td>Miêu tả</td>
-                    <td>Loại món</td>
-                    <td>Điều khiển</td>
+                    <th>Dish ID</th>
+                    <th>Dish Name</th>
+                    <th>Dish Price (VND)</th>
+                    <th>Describe</th>
+                    <th>Dish Type</th>
+                    <th>Control</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,7 +54,7 @@
                             <td>@order.des</td>
                             <td>@order.dishtype</td>
                             <td>
-                                <button onclick="delDish(@order.id)" data-id="@order.id">Xoá Món</button>
+                                <button onclick="delDish(@order.id)" data-id="@order.id">Delete Dish</button>
                             </td>
                         </tr>
                     }

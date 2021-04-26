@@ -24,13 +24,13 @@
                 @item.paid
             </td>
             <td>
-                <button onclick="deleteProduct('@item.productId'); discount()" data-id="@item.productId">Xoá món</button>
+                <button onclick="delProduct('@item.productId'); idiscount()" data-id="@item.productId">Delete</button>
             </td>
         </tr>
     }
 }
 <script type="text/javascript" class="init">
-    function deleteProduct(id) {
+    function delProduct(id) {
         var id = id;
         $.ajax({
             url: '/Home/delProduct',
@@ -46,10 +46,10 @@
             $("#bill").val(view);
         });
     }
-    function discount() {
+    function idiscount() {
         var url = '@Url.Action("ImportDiscount", "Home")';
-        $.post(url, {'discount': $('#discount').val(), 'shipFee': $('#shipFee').val() }, function (view) {
-            $("#bill").val(view);
+        $.post(url, { 'model': $('form').serialize(), 'discount': $('#product-discount').val(), 'shipFee': $('#shipFee').val() }, function (view) {
+            $("#ibill").val(view);
         });
     }
 </script>

@@ -345,6 +345,7 @@
     <Content Include="Views\Home\delProduct.cshtml" />
     <Content Include="Views\Home\seeImport.cshtml" />
     <Content Include="Views\Home\ViewAllImport.cshtml" />
+    <Content Include="Views\Home\QuanliProduct.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

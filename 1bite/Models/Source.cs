@@ -9,5 +9,6 @@ namespace _1bite.Models
     {
         public int id { get; set; }
         public string source { get; set; }
+        public string address { get; set; }
     }
 }

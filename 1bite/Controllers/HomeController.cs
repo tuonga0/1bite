@@ -23,6 +23,23 @@ namespace _1bite.Controllers
         {
             return DateTime.Now.ToString();
         }
+        public int getStaffRank()
+        {
+            int rank;
+            string user_name;
+            HttpCookie reqCookies = Request.Cookies["userinfo"];
+            user_name = reqCookies["userName"].ToString();
+            rank = AccountDAO.checkAccRank(user_name);
+            return rank;
+        }
+        public bool isAdmin()
+        {
+            if (getStaffRank() == 1)
+            {
+                return true;
+            }
+            return false;
+        }
 
         public ActionResult LoggedIn()
         {
@@ -253,7 +270,7 @@ namespace _1bite.Controllers
                     lid = AccountDAO.getImportDetailsWithId(i.id);
                     foreach (ImportDetail id in lid)
                     {
-                        i.total += id.amount * id.unitPrice;
+                        i.total += (id.amount * id.unitPrice) - id.discounted;
                     }
                     i.total -= i.overallDiscount;
                 }
@@ -274,9 +291,41 @@ namespace _1bite.Controllers
                     Response.Cookies.Add(c);
                     return View("Error");
                 }
+                if (isAdmin())
+                {
                 mymodel.Dish = AccountDAO.getDish();
                 mymodel.DishType = AccountDAO.getDishType();
                 return View(mymodel);
+                }
+                else
+                {
+                    return RedirectToAction("Manage");
+                }
+            }
+            return View("Error");
+        }
+        public ActionResult QuanliProduct()
+        {
+            if (Request.Cookies["userinfo"] != null)
+            {
+                HttpCookie reqCookies = Request.Cookies["userinfo"];
+                if (AccountDAO.GetStaffId(reqCookies["userName"].ToString()) == null)
+                {
+                    var c = new HttpCookie("userinfo");
+                    c.Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies.Add(c);
+                    return View("Error");
+                }
+                if (isAdmin())
+                {
+                    mymodel.Product = AccountDAO.GetProducts();
+                    mymodel.Source = AccountDAO.GetSources();
+                    return View(mymodel);
+                }
+                else
+                {
+                    return RedirectToAction("Manage");
+                }
             }
             return View("Error");
         }
@@ -306,18 +355,26 @@ namespace _1bite.Controllers
                     Response.Cookies.Add(c);
                     return View("Error");
                 }
-                mymodel.Rank = AccountDAO.getRank();
-                List<Account> la = new List<Account>();
-                la = AccountDAO.GetAccount();
-                foreach (Account a in la)
+                if (isAdmin())
                 {
-                    a.role = AccountDAO.getRankwithId(a.rank);
+                    mymodel.Rank = AccountDAO.getRank();
+                    List<Account> la = new List<Account>();
+                    la = AccountDAO.GetAccount();
+                    foreach (Account a in la)
+                    {
+                        a.role = AccountDAO.getRankwithId(a.rank);
+                    }
+                    mymodel.Account = la;
+                    return View(mymodel);
                 }
-                mymodel.Account = la;
-                return View(mymodel);
+                else
+                {
+                    return RedirectToAction("Manage");
+                }
             }
             return View("Error");
         }
+        
         public ActionResult Stats()
         {
             if (Request.Cookies["userinfo"] != null)
@@ -348,7 +405,6 @@ namespace _1bite.Controllers
             }
             return View("Error");
         }
- 
 
         [HttpPost]
         public ActionResult addDish(int id,string name, int amount)
@@ -380,6 +436,7 @@ namespace _1bite.Controllers
             mymodel.OrderDetails = odl;
             return PartialView(mymodel);
         }
+
         [HttpPost]
         public ActionResult addProduct(int id, int amount,int unitPrice, int discount)
         {
@@ -394,7 +451,7 @@ namespace _1bite.Controllers
                 importDetail = idl.Find(m => m.productId == id);
                 importDetail.amount += amount;
                 importDetail.discounted = discount;
-                importDetail.paid = (importDetail.amount * importDetail.unitPrice) - importDetail.discounted;
+                importDetail.paid = (importDetail.amount * importDetail.unitPrice) - discount;
             }
             else
             {
@@ -413,6 +470,7 @@ namespace _1bite.Controllers
             mymodel.importDetail = idl;
             return PartialView(mymodel);
         }
+
         [HttpPost]
         public ActionResult ChangeTheValue(ViewModel model, int discount, string type)
         {
@@ -421,16 +479,18 @@ namespace _1bite.Controllers
         [HttpPost]
         public ActionResult ImportDiscount(ViewModel model, int discount, int shipFee)
         {
-            int bill = 0;
+            var m = new ViewModel();
             List<ImportDetail> del = (List<ImportDetail>)System.Web.HttpContext.Current.Session["nhaphangg"];
             if (del != null)
             {
                 foreach (ImportDetail id in del)
                 {
-                    bill += id.paid;
+                    m.total += id.paid;
                 }
             }
-            return Json(bill - discount + shipFee);
+            m.total = m.total + shipFee;
+            //return Json(bill - discount + shipFee);
+            return Json(m.total);
         }
         public int Discount(int discount, string type)
         {
@@ -551,17 +611,36 @@ namespace _1bite.Controllers
             AccountDAO.addImport(discount, shipFee, sourceId, staffId,add);
             return RedirectToAction("Nhaphang");
         }
-        public ActionResult newDish(string name,int id,int price,string des)
+        public ActionResult newProduct(string name, string unit)
         {
-            AccountDAO.addDish(name, id, price,des);
+            AccountDAO.addProduct(name, unit);
+            return RedirectToAction("QuanliProduct");
+        }
+        public ActionResult newDish(string name, int type,string des, int price)
+        {
+            AccountDAO.addDish(name, type,price,des);
             return RedirectToAction("QuanliDish");
+        }
+        public ActionResult newSource(string name, string address)
+        {
+            AccountDAO.addSource(name, address);
+            return RedirectToAction("QuanliProduct");
         }
         public ActionResult DeleleDish(int id)
         {
             AccountDAO.deleteDish(id);
             return RedirectToAction("QuanliDish");
         }
-
+        public ActionResult DeleleProduct(int id)
+        {
+            AccountDAO.deleteProduct(id);
+            return RedirectToAction("QuanliProduct");
+        }
+        public ActionResult DeleleSource(int id)
+        {
+            AccountDAO.deleteSource(id);
+            return RedirectToAction("QuanliProduct");
+        }
         public ActionResult addAccount(string username, string password, string name, string phone, string email,int rankId)
         {
             AccountDAO.addAcc(username, password, name, phone, email, rankId);
@@ -579,8 +658,8 @@ namespace _1bite.Controllers
                 return View("Error");
             }
         }
-
-        public ActionResult Delete(int id)
+        [HttpPost]
+        public ActionResult DeleteOrder(int id)
         {
             AccountDAO.deleteOrders(id);
             return RedirectToAction("Banhang");
@@ -641,7 +720,16 @@ namespace _1bite.Controllers
             }
             return View("Error");
         }
-
+        public ActionResult updatePassword(int id, string pass)
+        {
+            AccountDAO.changePass(id,pass);
+            return RedirectToAction("QuanliAccount");
+        }
+        public ActionResult updateStaff(int id, string name,string phone, string email)
+        {
+            AccountDAO.changeStaffInfo(id, name,phone,email);
+            return RedirectToAction("QuanliAccount");
+        }
         public ActionResult Cart()
         {
             ViewBag.Message = "Your cart page.";

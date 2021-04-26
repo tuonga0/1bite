@@ -46,7 +46,7 @@
     }
     function discount() {
         var url = '@Url.Action("ChangeTheValue", "Home")';
-        $.post(url, { 'model': $('form').serialize(), 'discount': $('#discount').val(), 'type': $("#select-discount option:selected").val(), 'address': $("customeraddress").val() }, function (view) {
+        $.post(url, { 'model': $('form').serialize(), 'discount': $('#discount').val(), 'type': $("#select-discount option:selected").val() }, function (view) {
             $("#bill").val(view);
         });
     }

@@ -7,33 +7,47 @@
 @model ViewModel
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <script src="jquery-3.5.1.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
     <link href="~/Content/bootstrap/bootstrap-reboot.css" rel="stylesheet" />
     <link href="~/Content/css/Banhang.css" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="viewport" content="width=device-width" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>
+        window.jQuery || document.write('<script src="http://mysite.com/jquery.min.js"><\/script>')
+    </script>
+    <script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="/js/jquery-ui-personalized-1.5.2.packed.js"></script>
+    <script language="JavaScript" type="text/javascript" src="/js/sprinkle.js"></script>
     <title>Account Managing</title>
 </head>
 <body>
     <a href="/Home/Manage">Go back</a>
     Logo, Quản lí tài khoản, button Trang chủ
     <div>
-        <h4>Create Account:</h4>
-        <input name="username" id="username" type="text" placeholder="Username">
-        <input name="password" id="password" type="password" placeholder="Password">
-        <h4>Select Rank:</h4>
-        <select id="selectrank" name="selectrank">
-            @foreach (Rank rank in Model.Rank)
-            {
-                <option value="@rank.id">@rank.rank</option>
-            }
-        </select>
-        <input name="name" id="name" type="text" placeholder="Staff Name">
-        <input name="phone" id="phone" type="text" placeholder="Phone Number" maxlength="10">
-        <input name="email" id="email" type="text" placeholder="Email">
-        <input type="button" value="Confirm" onclick="addAccount()" />
+        <div id="newAccount">
+                        <h4>Create Account</h4>
+                        <input name="username" id="username" type="text" placeholder="Username">
+                        <input name="password" id="password" type="password" placeholder="Password">
+                        <select id="selectrank" name="selectrank">
+                            @foreach (Rank rank in Model.Rank)
+                            {
+                                <option value="@rank.id">@rank.rank</option>
+                            }
+                        </select>
+
+                        <h4>Staff Information</h4>
+                        <input name="name" id="name" type="text" placeholder="Staff Name">
+                        <input name="phone" id="phone" type="text" placeholder="Phone Number" maxlength="10">
+                        <input name="email" id="email" type="text" placeholder="Email">
+
+                        <br />
+                        <button onclick="addAccount()"><i class="fa fa-check" aria-hidden="true"></i> Confirm</button>
+        </div>
+        <h4>Account List</h4>
         <div>
             <table id="table_id" class="display" width="100%">
                 <thead>
@@ -56,8 +70,9 @@
                                 <td>@order.date</td>
                                 <td>@order.role</td>
                                 <td>
-                                    <button onclick="seeAccount(@order.id)" data-id="@order.id">See Information</button>
-                                    <button onclick="delAccount(@order.id)" data-id="@order.id">Delete Account</button>
+                                    <button class="information" onclick="seeAccount(@order.id)" data-id="@order.id"><i class="fa fa-info-circle" aria-hidden="true"></i> See Information</button>
+                                    <button class="important" onclick="askPassword(@order.id,'@order.username.Trim()','@order.password.Trim()')" data-id="@order.id"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Update Password</button>
+                                    <button class="extreme" onclick="delAccount(@order.id)" data-id="@order.id"><i class="fa fa-trash" aria-hidden="true"></i> Delete Account</button>
                                 </td>
                             </tr>
                         }
@@ -65,6 +80,7 @@
                 </tbody>
             </table>
         </div>
+        <h4>Account Detail</h4>
         <table class="display" style="width:100%">
             <caption>Staff Information</caption>
             <thead>
@@ -73,6 +89,7 @@
                     <th>Staff Name</th>
                     <th>Phone number</th>
                     <th>Email</th>
+                    <th>Control</th>
                 </tr>
             </thead>
             <tbody id="Staff">
@@ -89,6 +106,25 @@
             location.reload();
         });
     }
+    function askPassword(id, username, password) {
+        var npassword = prompt("This is account: " + username + "\n Please enter new Password: ", password);
+        if (npassword == null || npassword == "" || npassword == password) {
+            alert("Cancel");
+        } else {
+            updatePassword(id, npassword);
+        }
+    }
+    function updatePassword(id,password) {
+        $.ajax({
+            url: '/Home/updatePassword',
+            type: "post",
+            data: { 'id': id, 'pass': password },
+            cache: false,
+            success: function (result) {
+                location.reload();
+            }
+        });
+    }
     function delAccount(id) {
         var id = id;
         $.ajax({
@@ -97,7 +133,6 @@
             data: { 'id': id },
             cache: false,
             success: function (result) {
-                alert(result)
                 location.reload();
             }
         });
@@ -110,7 +145,6 @@
             data: { 'id': id },
             cache: false,
             success: function (result) {
-                alert(result)
                 $('#Staff').empty().append(result);
             }
         });

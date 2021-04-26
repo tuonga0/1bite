@@ -13,6 +13,53 @@
             <td>@od.name</td>
             <td><a href="tel:@od.phone">@od.phone</a></td>
             <td>@od.email</td>
+            <td><button class="important" onclick="askStaff(@od.id, '@od.name.Trim()', '@od.phone.Trim()', '@od.email.Trim()')" data-id="@od.id">Update Staff</button></td>
         </tr>
     }
 }
+<script>
+    function askStaff(id, name, phone, email) {
+        var uname, uphone, uemail;
+        var nname = prompt("Please enter new Name: ", name);
+        var nphone = prompt("Please enter new Phone: ", phone);
+        var nemail = prompt("Please enter new Email: ", email);
+        if (nname == null || nname == "" || nname == name) {
+            uname = name;
+        }
+        else {
+            uname = nname;
+        }
+
+        if (nphone == null || nphone == "" || nphone == phone) {
+            uphone = phone;
+        }
+        else {
+            uphone = nphone;
+        }
+
+        if (nemail == null || nemail == "" || nemail == email) {
+            uemail = email;
+        }
+        else {
+            uemail = nemail;
+        }
+
+        if (uname == name && uphone == phone && uemail == email) {
+            alert("Update Cancel");
+        } else {
+            updateStaff(id, uname, uphone, uemail);
+        }
+    }
+    function updateStaff(id, name, phone, email) {
+        $.ajax({
+            url: '/Home/updateStaff',
+            type: "post",
+            data: { 'id': id, 'name': name, 'phone': phone, 'email': email },
+            cache: false,
+            success: function (result) {
+                alert("Updated");
+                location.reload();
+            }
+        });
+    }
+</script>

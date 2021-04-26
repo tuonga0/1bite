@@ -17,6 +17,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script>
@@ -61,12 +62,12 @@
         function delOrd(id) {
             var id = id;
             $.ajax({
-                url: '/Home/Delete',
+                url: '/Home/DeleteOrder',
                 type: "post",
                 data: { 'id': id },
                 cache: false,
                 success: function (result) {
-                    $('#Order').empty().append(result);
+                    //$('#Order').empty().append(result);
                     location.reload();
                 }
             });
@@ -92,6 +93,7 @@
     <div class="inputOrder">
         <h4 class="sellerName">Staff: @ViewBag.messagestaffname</h4>
         @*Thêm Món*@
+        <h4>New Dish</h4>
         <select id="selectdish" name="selectdish">
             @foreach (Dish dish in Model.Dish)
             {
@@ -99,7 +101,7 @@
             }
         </select>
         <input name="dishamount" id="dishamount" min="1" step="any" type="number" value="1">
-        <button id="addRow" onclick="addDishjs(); discount()">Add</button>
+        <button id="addRow" onclick="addDishjs(); discount()"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
         <table class="display" style="width:100%">
             <caption>Dish list of Order</caption>
             <thead>
@@ -127,20 +129,21 @@
         </table>
     </div>
     <div class="orderOverallInformation">
-        <h4>Discount:</h4>
+        <p>Discount:</p>
         <input name="discount" id="discount" min="1" step="any" type="number" value="0" onkeypress="discount(this.val)">
         <select id="select-discount" name="select-discount" onchange="discount()">
             <option value="VND">VND</option>
             <option value="%">%</option>
         </select>
-        <h4>Note:</h4>
+        <p>Note:</p>
         <input name="note" id="note" step="any" type="text" placeholder="Note">
-        <h4>Total cost of Order:</h4>
-        <button type="button" onclick="discount()">Refresh</button>
-        <input name="bill" id="bill" min="0" step="any" type="number" value="0" readonly="readonly"><p>VND</p>
+        <p>Total cost of Order:</p>
+        <button type="button" onclick="discount()"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
+        <input name="bill" id="bill" min="0" step="any" type="number" value="0" readonly="readonly"><p>VND</p><br />
+        <button type="button" onclick="addOrder()"><i class="fa fa-check" aria-hidden="true"></i> Confirm</button>
+        <button class="important" type="button" onclick="window.location.href = '/Home/Banhang'" title="Về trang chủ"><i class="fa fa-ban" aria-hidden="true"></i> Cancel</button>
     </div>
-    <button type="button" onclick="window.location.href = '/Home/Banhang'" title="Về trang chủ">Cancel</button>
-    <input type="button" value="Confirm" onclick="addOrder()" /><br />
+
     <div class="orderHistory" 4>
         <h4>Order today:</h4>
         <a href="/Home/ViewAllOrders">See all Order</a>
@@ -169,8 +172,8 @@
                         <td>@order.note</td>
                         <td>@order.Total</td>
                         <td>
-                            <button onclick="seeOrd('@order.id')" data-id="@order.id">See order</button>
-                            <button onclick="delOrd('@order.id')" data-id="@order.id">Delete order</button>
+                            <button class="information" onclick="seeOrd('@order.id')" data-id="@order.id"><i class="fa fa-info-circle" aria-hidden="true"></i> See order</button>
+                            <button class="extreme" onclick="delOrd('@order.id')" data-id="@order.id"><i class="fa fa-trash" aria-hidden="true"></i> Delete order</button>
                         </td>
                     </tr>
                 }

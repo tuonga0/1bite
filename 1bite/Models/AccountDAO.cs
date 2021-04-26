@@ -33,6 +33,25 @@ namespace _1bite
             conn.Close();
             return rank;
         }
+        public static int checkAccRank(string username)
+        {
+            int id;
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=uonga0.HzL12153;pwd=Tuong1998!";
+            var conn = new SqlConnection(url);
+            conn.Open();
+            string sql = "Select rankId from Account where username = @username";
+            var sqlcom = new SqlCommand(sql, conn);
+            sqlcom.Parameters.Add("@username", SqlDbType.VarChar).Value = username;
+            SqlDataReader sqlRead = sqlcom.ExecuteReader();
+            while (sqlRead.Read())
+            {
+                id = Int32.Parse(sqlRead[0].ToString());
+                conn.Close();
+                return id;
+            }
+            conn.Close();
+            return 0;
+        }
         public static string EncodePassword(string originalPassword)
         {
             //Declarations
@@ -74,6 +93,28 @@ namespace _1bite
             sqlcom.Parameters.Add("@type", SqlDbType.Int).Value = type;
             sqlcom.Parameters.Add("@price", SqlDbType.Int).Value = price;
             sqlcom.Parameters.Add("@des", SqlDbType.NVarChar).Value = des;
+            sqlcom.ExecuteNonQuery();
+            conn.Close();
+        }
+        public static void addProduct(string name, string unit)
+        {
+            var sql = "insert into Product values(@name,@unit)";
+            var conn = setConnection();
+            conn.Open();
+            var sqlcom = new SqlCommand(sql, conn);
+            sqlcom.Parameters.Add("@name", SqlDbType.NVarChar).Value = name;
+            sqlcom.Parameters.Add("@unit", SqlDbType.NVarChar).Value = unit;
+            sqlcom.ExecuteNonQuery();
+            conn.Close();
+        }
+        public static void addSource(string name, string address)
+        {
+            var sql = "insert into Source values(@name,@unit)";
+            var conn = setConnection();
+            conn.Open();
+            var sqlcom = new SqlCommand(sql, conn);
+            sqlcom.Parameters.Add("@name", SqlDbType.NVarChar).Value = name;
+            sqlcom.Parameters.Add("@unit", SqlDbType.NVarChar).Value = address;
             sqlcom.ExecuteNonQuery();
             conn.Close();
         }
@@ -430,6 +471,7 @@ namespace _1bite
                   {
                       id = Convert.ToInt32(dr["sourceId"]),
                       source = dr["sourceName"].ToString(),
+                      address = dr["sourceAddress"].ToString()
                   }).ToList();
             return ls;
         }
@@ -726,6 +768,26 @@ namespace _1bite
             cmd.ExecuteNonQuery();
             conn.Close();
         }
+        public static void deleteProduct(int id)
+        {
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=uonga0.HzL12153;pwd=Tuong1998!";
+            var conn = new SqlConnection(url);
+            conn.Open();
+            SqlCommand cmd = new SqlCommand("Delete from Product where productId = @id", conn);
+            cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
+        public static void deleteSource(int id)
+        {
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=uonga0.HzL12153;pwd=Tuong1998!";
+            var conn = new SqlConnection(url);
+            conn.Open();
+            SqlCommand cmd = new SqlCommand("Delete from Source where sourceID = @id", conn);
+            cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
 
         public static void deleteAccount(int id)
         {
@@ -734,6 +796,30 @@ namespace _1bite
             conn.Open();
             SqlCommand cmd = new SqlCommand("Delete from Staff where accId = @id delete from Account where accID = @id", conn);
             cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
+        public static void changePass(int id, string password)
+        {
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=uonga0.HzL12153;pwd=Tuong1998!";
+            var conn = new SqlConnection(url);
+            conn.Open();
+            SqlCommand cmd = new SqlCommand("update Account set password = @password where accID = @id", conn);
+            cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
+            cmd.Parameters.Add("@password", SqlDbType.VarChar).Value = password;
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
+        public static void changeStaffInfo(int id, string name,string phone, string email)
+        {
+            var url = "server=137.59.106.96 ; database =dBforStudying;uid=uonga0.HzL12153;pwd=Tuong1998!";
+            var conn = new SqlConnection(url);
+            conn.Open();
+            SqlCommand cmd = new SqlCommand("update Staff set staffName=@name,staffPhone=@phone,staffEmail=@email where staffId = @id", conn);
+            cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
+            cmd.Parameters.Add("@name", SqlDbType.NVarChar).Value = name;
+            cmd.Parameters.Add("@phone", SqlDbType.VarChar).Value = phone;
+            cmd.Parameters.Add("@email", SqlDbType.VarChar).Value = email;
             cmd.ExecuteNonQuery();
             conn.Close();
         }

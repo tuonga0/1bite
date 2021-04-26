@@ -15,6 +15,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="manifest" href="/site.webmanifest">
     <meta name="viewport" content="width=device-width" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -44,15 +45,19 @@
                 }
             });
         }
-        function discount() {
+        function idiscount() {
             var url = '@Url.Action("ImportDiscount", "Home")';
-            $.post(url, { 'discount': $('#discount').val(), 'shipFee': $('#shipFee').val() }, function (view) {
-                $("#bill").val(view);
+            $.post(url, { 'model': $('form').serialize(), 'discount': $('#product-discount').val(), 'shipFee': $('#shipFee').val() }, function (view) {
+                $("#ibill").val(view);
             });
         }
         function addImport() {
+            if (!$("#ImportListProduct tr").length) {
+                alert("Need to add product first");
+                return;
+            }
             var url = '@Url.Action("addImport", "Home")';
-            $.post(url, { 'discount': $('#discount').val(), 'shipFee': $("#shipFee").val(), 'sourceId': $("#select-source option:selected").val() }, function (view) {
+            $.post(url, { 'discount': 0, 'shipFee': $("#shipFee").val(), 'sourceId': $("#select-source option:selected").val() }, function (view) {
                 location.reload();
             });
         }
@@ -89,20 +94,21 @@
     <h1>Import</h1>
     <div class="inputOrder">
         <h4 class="sellerName">Staff: @ViewBag.messagestaffname</h4>
-        <h4>Product Name:</h4>
+        <h4>New Product</h4>
+        <p>Product Name:</p>
         <select id="selectproduct" name="selectproduct">
             @foreach (Product product in Model.Product)
             {
                 <option value="@product.id">@product.name (@product.unit)</option>
             }
         </select>
-        <h4>Amount:</h4>
+        <p>Amount:</p>
         <input name="productamount" id="productamount" min="1" step="any" type="number" value="1">
-        <h4>Unit Price:</h4>
+        <p>Unit Price:</p>
         <input name="unitprice" id="unitprice" min="1" step="any" type="number" value="1">
-        <h4>Product's Discount:</h4>
+        <p>Product's Discount:</p>
         <input name="product-discount" id="product-discount" step="any" type="number" value="0">
-        <button id="addRow" onclick="addGoods(), discount()">Add Product</button>
+        <button id="addRow" onclick="addGoods(), idiscount()"><i class="fa fa-plus" aria-hidden="true"></i> Add Product</button>
         <table class="display" style="width:100%">
             <caption>Product list of Import order</caption>
             <thead>
@@ -130,23 +136,22 @@
         </table>
     </div>
     <div class="importOverallInformation">
-        <h4>Overall discount:</h4>
-        <input name="discount" id="discount" min="0" step="any" type="number" value="0" onkeypress="discount(this.val)">
-        <h4>Ship fee:</h4>
-        <input name="shipFee" id="shipFee" min="0" step="any" type="number" value="0" >
-        <h4>Source:</h4>
+        <p>Ship fee:</p>
+        <input name="shipFee" id="shipFee" min="0" step="any" type="number" value="0" onkeypress="idiscount(this.val)">
+        <p>Source:</p>
         <select id="select-source" name="select-source">
             @foreach (Source product in Model.Source)
             {
                 <option value="@product.id">@product.source</option>
             }
         </select>
-        <h4>Total cost:</h4>
-        <button type="button" onclick="discount()">Làm mới</button>
-        <input name="bill" id="bill" min="0" step="any" type="number" value="0" readonly="readonly"><p>VND</p>
+        <p>Total cost:</p>
+        <button type="button" onclick="idiscount()"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
+        <input name="ibill" id="ibill" min="0" step="any" type="number" value="0" readonly="readonly"><p>VND</p><br />
+        <button type="button" onclick="addImport()"><i class="fa fa-check" aria-hidden="true"></i> Confirm</button>
+        <button class="important" type="button" onclick="window.location.href = '/Home/Nhaphang'" title="Refresh data"><i class="fa fa-ban" aria-hidden="true"></i> Cancel</button>
     </div>
-    <button type="button" onclick="window.location.href = '/Home/Nhaphang'" title="Refresh data">Cancel</button>
-    <input type="button" value="Confirm" onclick="addImport()" /><br />
+
     <div class="importHistory" 4>
         <h4>Imported today</h4>
         <a href="/Home/ViewAllImport">See all Imported</a>
@@ -172,8 +177,8 @@
                     <td>@order.source</td>
                     <td>@order.total</td>
                     <td>
-                        <button onclick="seeImport('@order.id')" data-id="@order.id">See Import</button>
-                        <button onclick="delImport('@order.id')" data-id="@order.id">Delete</button>
+                        <button class="information" onclick="seeImport('@order.id')" data-id="@order.id"><i class="fa fa-info-circle" aria-hidden="true"></i> See Import</button>
+                        <button class="extreme" onclick="delImport('@order.id')" data-id="@order.id"><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>
                     </td>
                 </tr>
             }

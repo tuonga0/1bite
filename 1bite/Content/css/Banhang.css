@@ -23,14 +23,6 @@ div{
 #note{
     width:200px;
 }
-select{
-    width: 250px;
-    height: 30px;
-}
-input {
-    width: 50px;
-    height: 30px;
-}
 div thead,
 tfoot {
     background-color: #3f87a6;
@@ -67,3 +59,86 @@ div td {
     text-align: center;
 }
 
+p{
+    display:inline;
+    font-weight: 500;
+    color: white;
+/*    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;*/
+}
+a{
+    color: green;
+}
+input[type=button]{
+    text-align:center;
+    background-color: mediumseagreen;
+    color: white;
+    font-weight: 300;
+    height: 30px;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    border-radius: 4px;
+}
+button {
+    text-align: center;
+    background-color: mediumseagreen;
+    color: white;
+    font-weight: 300;
+    height: 30px;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    border-radius: 4px;
+}
+input{
+    border-radius: 4px;
+    border: none;
+    height: 30px;
+}
+
+select{
+    border-radius: 4px;
+    border:none;
+    height: 30px;
+}
+.hidden{
+    display:none;
+}
+.important {
+    background-color: #c08a3e;
+}
+.extreme{
+    background-color: #f60a2d;
+}
+.information{
+    background-color: #6e6cf8;
+}
+
+.split {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+.centered {
+/*    position: absolute;*/
+/*    top: 50%;
+    left: 50%;*/
+/*    transform: translate(-50%, -50%);*/
+    text-align: justify;
+}
+.left {
+    left: 0;
+}
+.right {
+    right: 0;
+}
+.thid{
+    width: 15%;
+}
+.thlong{
+    width: 49%;
+}
